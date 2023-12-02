@@ -1,0 +1,36 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/BehaviourTreeEditor/Editor/UIBuilder/BTreeEditor.uss?fileID=7433441132597879392&amp;guid=c182c415e99b975408b25fd1fbc2d268&amp;type=3#BTreeEditor" />
+    <uie:Toolbar>
+        <uie:ToolbarMenu display-tooltip-when-elided="true" text="Assets" name="Assets" />
+        <uie:ToolbarButton text="Save Asset" display-tooltip-when-elided="true" name="SaveAsset" style="border-left-width: 1px; border-right-width: 1px; border-top-width: 0; border-bottom-width: 0; padding-left: 4px; padding-right: 4px; left: 1px; padding-top: 2px; padding-bottom: 0; border-left-color: rgba(0, 0, 0, 0.38); border-right-color: rgba(0, 0, 0, 0.38); border-top-color: rgba(0, 0, 0, 0.38); border-bottom-color: rgba(0, 0, 0, 0.38); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;" />
+        <uie:ToolbarMenu display-tooltip-when-elided="true" text="Select Tree" name="SelectTree" />
+        <uie:ToolbarSpacer style="width: 100px;" />
+        <uie:ToolbarButton text="+" display-tooltip-when-elided="true" name="AddRunner" style="border-left-color: rgb(39, 40, 41); border-right-color: rgb(39, 40, 41); border-top-color: rgb(39, 40, 41); border-bottom-color: rgb(39, 40, 41); border-top-width: 0; border-bottom-width: 0; padding-top: 2px; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px;" />
+        <uie:ToolbarButton text="-" display-tooltip-when-elided="true" name="DeleteRunner" style="border-left-color: rgb(39, 40, 41); border-right-color: rgb(39, 40, 41); border-top-color: rgb(39, 40, 41); border-bottom-color: rgb(39, 40, 41); border-top-width: 0; border-bottom-width: 0; padding-top: 2px; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px;" />
+    </uie:Toolbar>
+    <Editor.SplitView name="SplitView" fixed-pane-initial-dimension="300">
+        <ui:VisualElement name="left-panel">
+            <Editor.SplitView orientation="Vertical" fixed-pane-initial-dimension="300" style="font-size: 15px;">
+                <ui:VisualElement name="inspector-container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <ui:Label text="Inspector" display-tooltip-when-elided="true" style="-unity-font-style: bold; -unity-text-outline-color: rgb(0, 0, 0); background-color: rgb(32, 32, 32); font-size: 15px;" />
+                    <Editor.InspectorView />
+                </ui:VisualElement>
+                <ui:VisualElement name="variables-container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <ui:Label tabindex="-1" text="Variables" display-tooltip-when-elided="true" style="background-color: rgb(32, 32, 32); -unity-font-style: bold; height: auto;" />
+                    <ui:IMGUIContainer name="AddVariableContainer" style="height: 75px;">
+                        <ui:TextField picking-mode="Ignore" label="Name" name="NameField" style="font-size: 12px;" />
+                        <ui:DropdownField label="Type" index="-1" choices="string" name="TypeSelect" style="height: 20px; width: 243px; font-size: 12px;" />
+                        <ui:Button text="Add" display-tooltip-when-elided="true" name="Add" />
+                    </ui:IMGUIContainer>
+                    <ui:ScrollView mode="Vertical" style="height: 312px; position: relative; top: 15px; left: 12px; width: 278px;" />
+                </ui:VisualElement>
+            </Editor.SplitView>
+        </ui:VisualElement>
+        <ui:VisualElement name="right-panel">
+            <ui:Label text="Tree View" display-tooltip-when-elided="true" style="-unity-font-style: bold; -unity-text-outline-color: rgb(32, 32, 32); background-color: rgb(32, 32, 32); font-size: 15px;" />
+            <BtreeView focusable="true" style="flex-grow: 1;">
+                <ui:Label text="Select a  Behaviour Tree GameObject" display-tooltip-when-elided="true" name="BehaviourTreeName" style="position: absolute; left: 12px; top: 17px; -unity-font-style: bold; font-size: 23px;" />
+            </BtreeView>
+        </ui:VisualElement>
+    </Editor.SplitView>
+</ui:UXML>

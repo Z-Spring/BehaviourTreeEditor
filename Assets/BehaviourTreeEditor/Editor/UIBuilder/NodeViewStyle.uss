@@ -1,0 +1,195 @@
+#node-border {
+    background-color: rgba(56, 56, 56, 0.93);
+    border-left-color: rgb(37, 37, 37);
+    border-right-color: rgb(37, 37, 37);
+    border-top-color: rgb(37, 37, 37);
+    border-bottom-color: rgb(37, 37, 37);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    display: flex;
+    visibility: visible;
+    overflow: visible;
+    position: relative;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#input {
+    align-items: center;
+    min-height: auto;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#output {
+    align-items: center;
+    min-height: auto;
+    width: auto;
+    min-width: auto;
+}
+
+#selection-border {
+    border-left-color: rgb(133, 207, 85);
+    border-right-color: rgb(133, 207, 85);
+    border-top-color: rgb(133, 207, 85);
+    border-bottom-color: rgb(133, 207, 85);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+:hover > #selection-border {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    opacity: 1;
+}
+
+:selected > #selection-border {
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+:hover:selected > #selection-border {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}
+
+.node {
+    min-width: 150px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    min-height: auto;
+    -unity-slice-bottom: 3;
+}
+
+#title {
+    -unity-font-style: bold;
+    font-size: 14px;
+    -unity-text-align: upper-center;
+    min-height: 30px;
+    align-items: stretch;
+}
+
+#divider {
+    min-height: 1px;
+    background-color: rgb(43, 42, 42);
+}
+
+.action #input {
+    background-color: rgb(112, 200, 151);
+}
+
+.composite #input {
+    background-color: rgb(238, 229, 233);
+}
+
+.decorator #input {
+    background-color: rgb(123, 30, 122);
+}
+
+.root #input {
+    background-color: rgb(255, 127, 17);
+    min-height: 20px;
+}
+
+#node-state {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.running #node-state {
+    border-left-color: rgb(0, 124, 255);
+    border-right-color: rgb(0, 124, 255);
+    border-top-color: rgb(0, 124, 255);
+    border-bottom-color: rgb(0, 124, 255);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}
+
+.success #node-state {
+    border-left-color: rgb(102, 238, 17);
+    border-right-color: rgb(102, 238, 17);
+    border-top-color: rgb(102, 238, 17);
+    border-bottom-color: rgb(102, 238, 17);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}
+
+.failure #node-state {
+    border-left-color: rgb(255, 0, 0);
+    border-right-color: rgb(255, 0, 0);
+    border-top-color: rgb(255, 0, 0);
+    border-bottom-color: rgb(255, 0, 0);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}
+
+#connector {
+    min-height: auto;
+    min-width: auto;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    position: absolute;
+    bottom: 4px;
+    top: 4px;
+}
+
+.typeBoolean {
+    min-width: 80px;
+    min-height: auto;
+    max-height: 20px;
+}
+
+.condition #input {
+    background-color: rgb(255, 89, 100);
+}

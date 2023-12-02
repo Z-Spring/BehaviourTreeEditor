@@ -1,0 +1,17 @@
+GridBackground {
+    --grid-background-color: rgb(40, 40, 40);
+    --line-color: rgba(193, 196, 192, 0.1);
+    --thick-line-color: rgba(193, 196, 192, 0.1);
+    --spacing: 15;
+}
+
+.search-tree-entry {
+    justify-content: center;
+    text-align: center;
+}
+
+/* 样式表 USS 文件 */
+IMGUIContainer.my-style {
+    margin-bottom: 10px; /* 在每个 IMGUIContainer 的下方添加 10px 的外边距 */
+    background-color: #cccccc; /* 设置背景色为浅灰色 */
+}
