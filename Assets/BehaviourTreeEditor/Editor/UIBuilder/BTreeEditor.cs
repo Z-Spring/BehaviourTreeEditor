@@ -44,7 +44,6 @@ namespace Editor
         [MenuItem("BTreeEditor/Show Window")]
         public static void OpenWindow()
         {
-            Debug.Log("OpenWindow");
             var window = GetWindow<BTreeEditor>();
             window.minSize = new Vector2(800, 600);
         }
