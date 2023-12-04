@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using BehaviourTreeEditor.SharedVariables;
+using UnityEngine;
 
 namespace BehaviourTreeEditor.BTree.ParentSharedVariable
 {
     public class SharedVariableContainer : ScriptableObject
     {
-        // [HideInInspector] public List<Type> sharedVariables = new ();
     }
 }

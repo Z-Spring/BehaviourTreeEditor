@@ -6,12 +6,10 @@ namespace Editor
     public static class AssetResourceManager
     {
         const string RootBehaviourTreeEditorPath = "Assets/BehaviourTreeEditor/Editor";
-
-
         public const string BTEditorUXMLPath = "Assets/BehaviourTreeEditor/Editor/UIBuilder/BTreeEditor.uxml";
-
         public const string BTEditorUSSPath = "Assets/BehaviourTreeEditor/Editor/UIBuilder/BTreeEditor.uss";
         public const string NodeViewUXMLPath = "Assets/BehaviourTreeEditor/Editor/UIBuilder/NodeView.uxml";
+        
         public static string GetSharedVariableContainerAssetPath(string treeName)
         {
             return $"{RootBehaviourTreeEditorPath}/{treeName}SharedVariableContainer.asset";

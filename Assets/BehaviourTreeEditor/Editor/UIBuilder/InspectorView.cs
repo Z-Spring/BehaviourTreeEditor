@@ -16,24 +16,19 @@ namespace Editor
         {
         }
 
-        public void PopulateView(NodeView nodeView)
+        public void UpdateSelectedNodeInspector(NodeView nodeView)
         {
             Clear();
             Object.DestroyImmediate(editor);
-            if (nodeView == null)
-            {
-                return;
-            }
+            // if (nodeView == null)
+            // {
+            //     return;
+            // }
             editor = UnityEditor.Editor.CreateEditor(nodeView.node);
-            if (editor == null)
-            {
-                Debug.LogError("Failed to create editor for nodeView.node");
-                return;
-            }
 
             IMGUIContainer container = new IMGUIContainer(() =>
             {
-                if (editor.target)
+                if (editor && editor.target)
                 {
                     editor.OnInspectorGUI();
                 }

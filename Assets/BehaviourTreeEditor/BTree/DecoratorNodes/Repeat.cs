@@ -3,7 +3,7 @@
     public class Repeat : Decorator
     {
         public bool restartOnSuccess = true;
-        public bool restartOnFailure = false;
+        public bool restartOnFailure = true;
 
         protected override void OnEnter()
         {

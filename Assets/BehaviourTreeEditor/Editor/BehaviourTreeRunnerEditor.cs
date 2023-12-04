@@ -16,8 +16,8 @@ namespace Editor
         BehaviourTreeRunner behaviourTreeRunner;
         public static string previousTreeName;
 
-        // EditorWindow editorWindow => EditorWindow.GetWindow<BTreeEditor>();
-        BTreeEditor editorWindow => CreateInstance<BTreeEditor>();
+        EditorWindow editorWindow => EditorWindow.GetWindow<BTreeEditor>();
+        // BTreeEditor editorWindow => CreateInstance<BTreeEditor>();
 
         private void OnEnable()
         {
@@ -38,6 +38,8 @@ namespace Editor
             GUILayout.Label("TreeDescription", EditorStyles.boldLabel);
             behaviourTreeRunner.treeDescription =
                 EditorGUILayout.TextArea(behaviourTreeRunner.treeDescription, GUILayout.MinHeight(60));
+            InitBehaviourTree();
+            // ChangeLabelName();
             AddButton();
         }
 
@@ -48,13 +50,11 @@ namespace Editor
 
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Open/Create a Behaviour Tree Editor", GUILayout.ExpandWidth(true),
+            if (GUILayout.Button("Open Behaviour Tree Editor", GUILayout.ExpandWidth(true),
                     GUILayout.ExpandHeight(true), GUILayout.MaxWidth(300)))
             {
-                // Debug.Log("Open/Create a Behaviour Tree Editor");
-                CreateAndSaveNewBehaviorTree();
                 behaviourTreeRunner.tree.name = behaviourTreeRunner.treeName;
-                ChangeTreeName();
+                CheckIfTreeNameChanged();
                 BTreeEditor.OpenWindow();
                 ChangeLabelName();
             }
@@ -67,24 +67,17 @@ namespace Editor
             GUILayout.EndVertical();
         }
 
-        void CreateAndSaveNewBehaviorTree()
+        void InitBehaviourTree()
         {
             if (behaviourTreeRunner.tree == null)
             {
                 behaviourTreeRunner.tree = CreateInstance<BehaviourTree>();
-                if (behaviourTreeRunner.treeName != null)
+                if (Selection.activeObject is GameObject gameObject)
                 {
+                    behaviourTreeRunner.treeName = $"{gameObject.name}";
                     behaviourTreeRunner.tree.name = behaviourTreeRunner.treeName;
                 }
-                else
-                {
-                    if (Selection.activeObject is GameObject gameObject)
-                    {
-                        behaviourTreeRunner.treeName = $"{gameObject.name}";
-                        behaviourTreeRunner.tree.name = behaviourTreeRunner.treeName;
-                    }
-                }
-
+                
                 previousTreeName = behaviourTreeRunner.treeName;
                 PlayerPrefs.SetString("previousTreeName", previousTreeName);
                 AssetDatabase.CreateAsset(behaviourTreeRunner.tree, $"Assets/{behaviourTreeRunner.treeName}.asset");
@@ -93,7 +86,7 @@ namespace Editor
             }
         }
 
-        void ChangeTreeName()
+        void CheckIfTreeNameChanged()
         {
             if (behaviourTreeRunner.treeName != previousTreeName)
             {
@@ -109,7 +102,7 @@ namespace Editor
 
         void ChangeLabelName()
         {
-            BTreeEditor.root.Query<Label>("BehaviourTreeName").First().text =
+            editorWindow.rootVisualElement.Query<Label>("BehaviourTreeName").First().text =
                 behaviourTreeRunner.treeName + "- Behaviour";
         }
     }

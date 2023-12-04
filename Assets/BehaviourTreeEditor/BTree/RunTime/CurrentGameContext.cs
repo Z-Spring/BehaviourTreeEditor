@@ -22,9 +22,9 @@ namespace MurphyEditor.BTree.RunTime
                 gameObject = gameObject,
                 transform = gameObject.transform,
                 // rb = gameObject.GetComponent<Rigidbody>(),
-                agent = gameObject.GetComponent<NavMeshAgent>(),
-                waypoints = gameObject.GetComponent<SetPatrolPoints>().waypoints,
-                currentWaypoint = gameObject.GetComponent<SetPatrolPoints>().currentWaypoint
+                // agent = gameObject.GetComponent<NavMeshAgent>(),
+                // waypoints = gameObject.GetComponent<SetPatrolPoints>().waypoints,
+                // currentWaypoint = gameObject.GetComponent<SetPatrolPoints>().currentWaypoint
             };
         }
     }

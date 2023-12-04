@@ -92,7 +92,9 @@ namespace Editor
         {
             var propertyNamesToExclude = new[] { "m_Script" }
                 .Concat(fields.Select(field => field.Name)).ToArray();
+
             DrawPropertiesExcluding(serializedObject, propertyNamesToExclude);
+            serializedObject.ApplyModifiedProperties();
         }
 
         public static void AddSharedVariable(SharedVariable variable)

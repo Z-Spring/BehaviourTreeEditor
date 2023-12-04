@@ -5,7 +5,6 @@ using BehaviourTreeEditor.BTree;
 using Editor;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,7 +12,6 @@ public class BtreeView : GraphView
 {
     BehaviourTree tree;
     Vector2 mousePosition;
-    readonly Dictionary<string, Vector2> nodePositions = new();
     public Action<NodeView> OnNodeSelected;
     public static MyEdgeConnectorListener Listener;
     private Button saveButton;
@@ -21,9 +19,9 @@ public class BtreeView : GraphView
 
     private string originalTitleText;
 
-    BTreeEditor editorWindow = ScriptableObject.CreateInstance<BTreeEditor>();
+    // BTreeEditor ` = ScriptableObject.CreateInstance<BTreeEditor>();
     // EditorWindow editorWindow ;
-    // EditorWindow editorWindow2 => EditorWindow.GetWindow<BTreeEditor>();
+    EditorWindow editorWindow => EditorWindow.GetWindow<BTreeEditor>();
 
     public new class UxmlFactory : UxmlFactory<BtreeView, UxmlTraits>
     {
@@ -36,7 +34,7 @@ public class BtreeView : GraphView
         var styleSheet = AssetResourceManager.LoadAsset<StyleSheet>(AssetResourceManager.BTEditorUSSPath);
         styleSheets.Add(styleSheet);
         RegisterCallback();
-
+        // AutoFrameNode();
         Undo.undoRedoPerformed += OnUndoRedo;
     }
 
@@ -138,6 +136,11 @@ public class BtreeView : GraphView
         graphViewChanged -= OnGraphViewChanged;
         DeleteElements(graphElements);
         graphViewChanged += OnGraphViewChanged;
+        if (tree == null)
+        {
+            Debug.Log("tree is null");
+            return;
+        }
         if (tree.rootNode == null)
         {
             CreateRootNode();
@@ -156,7 +159,7 @@ public class BtreeView : GraphView
             });
         });
 
-        BTreeEditor.root.Q<Label>("BehaviourTreeName").text = tree.name + "- Behaviour";
+        editorWindow.rootVisualElement.Q<Label>("BehaviourTreeName").text = tree.name + "- Behaviour";
         editorWindow.titleContent.text = tree.name;
         originalTitleText = tree.name;
     }
@@ -181,7 +184,7 @@ public class BtreeView : GraphView
 
     public void AutoFrameNode()
     {
-        BTreeEditor.root.schedule.Execute(() =>
+        editorWindow.rootVisualElement.schedule.Execute(() =>
         {
             if (nodes.ToList().Count > 0)
             {
