@@ -59,7 +59,7 @@ namespace Editor
             treeView.OnNodeSelected = OnNodeSelectionChanged;
 
             string treeName = GetCurrentTreeName();
-            createSharedVariableEditor = new CreateSharedVariableEditor(this);
+            createSharedVariableEditor = new CreateSharedVariableEditor();
             UpdateCurrentSharedVariableView(treeName);
             createSharedVariableEditor.CreateSharedVariableDropdownField(root);
             createSharedVariableEditor.AddVariable(root, sharedVariableContainer);
@@ -165,7 +165,6 @@ namespace Editor
                 var runner = Selection.activeGameObject.GetComponent<BehaviourTreeRunner>();
                 if (runner)
                 {
-
                     // todo: inspectorView.PopulateView(null);
                     tree = runner.tree;
                     selectedTreeName = runner.treeName;
@@ -235,7 +234,7 @@ namespace Editor
                     break;
             }
         }
-        
+
         void OnNodeSelectionChanged(NodeView node)
         {
             inspectorView.UpdateSelectedNodeInspector(node);
@@ -250,7 +249,7 @@ namespace Editor
 
         private void OnDestroy()
         {
-            if (treeView.UnsavedChanges)
+            if (treeView.HasUnsavedChanges)
             {
                 treeView.SaveNodeAsset();
             }
