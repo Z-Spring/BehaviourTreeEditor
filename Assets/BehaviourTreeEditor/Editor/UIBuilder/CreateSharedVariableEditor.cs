@@ -14,12 +14,8 @@ namespace Editor
 {
     public class CreateSharedVariableEditor
     {
-        BTreeEditor bTreeEditor;
         readonly List<UnityEditor.Editor> editorList = new();
-
         readonly Dictionary<SharedVariable, IMGUIContainer> sharedVariableContainerDic = new();
-
-        // SharedVariableContainer sharedVariableContainer;
         IMGUIContainer variableContainer;
         ScrollView scrollView;
 
@@ -44,12 +40,6 @@ namespace Editor
             { "Collider", typeof(SharedCollider) },
             { "LayerMask", typeof(SharedLayerMask) }
         };
-
-        public CreateSharedVariableEditor(BTreeEditor bTreeEditor)
-        {
-            this.bTreeEditor = bTreeEditor;
-        }
-
 
         public void CreateSharedVariableDropdownField(VisualElement root)
         {
@@ -218,7 +208,7 @@ namespace Editor
             return sv;
         }
 
-        public void InitializeVariableEditors(string treeName,VisualElement root)
+        public void InitializeVariableEditors(string treeName, VisualElement root)
         {
             // editorList.Clear();
             // scrollView = root.Q<ScrollView>();
@@ -230,7 +220,7 @@ namespace Editor
             // {
             //     Debug.Log("sv.sharedVariables.Count <= 0");
             // }
-            
+
             editorList.Clear();
             scrollView = root.Q<ScrollView>();
             scrollView.Clear();
