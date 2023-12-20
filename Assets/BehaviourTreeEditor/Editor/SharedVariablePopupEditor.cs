@@ -57,7 +57,8 @@ namespace Editor
         {
             var nodeType = target.GetType();
             return nodeType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(field => typeof(SharedVariable).IsAssignableFrom(field.FieldType));
+                .Where(field => typeof(SharedVariable).IsAssignableFrom(field.FieldType) ||
+                                field.FieldType == typeof(SharedVariable));
         }
 
         void InitSharedVariableFields(List<FieldInfo> sharedVariableFields)
@@ -65,13 +66,14 @@ namespace Editor
             foreach (var field in sharedVariableFields)
             {
                 var scriptableObjects = allSharedVariableScriptableObjects
-                    .Where(scriptableObject => scriptableObject.GetType() == field.FieldType).ToArray();
+                    .Where(scriptableObject => scriptableObject.GetType() == field.FieldType ||
+                                               scriptableObject.GetType().IsSubclassOf(field.FieldType)).ToArray();
                 var names = scriptableObjects.Select(scriptableObject => scriptableObject.name).ToArray();
-                DrawSharedVariablePopup(names, scriptableObjects, field);
+                DrawSharedVariablePopup(names, ref scriptableObjects, field);
             }
         }
 
-        void DrawSharedVariablePopup(string[] names, ScriptableObject[] scriptableObjects, FieldInfo field)
+        void DrawSharedVariablePopup(string[] names, ref ScriptableObject[] scriptableObjects, FieldInfo field)
         {
             var sharedVariable = (SharedVariable)field.GetValue(target);
 
