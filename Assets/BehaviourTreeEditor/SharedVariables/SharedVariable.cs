@@ -4,6 +4,9 @@ namespace BehaviourTreeEditor.SharedVariables
 {
     public abstract class SharedVariable : ScriptableObject
     {
-        public SharedVariable sharedVariable;
+
+        public abstract void SetValue(object value);
+
+        public abstract object GetValue();
     }
 }
