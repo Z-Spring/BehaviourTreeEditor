@@ -7,7 +7,8 @@ namespace BehaviourTreeEditor.BTree.Conditionals
     public class HasReceivedEvent : Conditional
     {
         public SharedString eventName;
-        public SharedString receivedMessage;
+        public SharedVariable receivedArg1;
+        public SharedVariable receivedArg2;
 
         BehaviourTreeRunner behaviourTreeRunner;
         bool hasRegistered;
@@ -21,6 +22,7 @@ namespace BehaviourTreeEditor.BTree.Conditionals
                 hasRegistered = true;
                 behaviourTreeRunner.RegisterEvent(eventName.sharedValue, ReceivedEvent);
                 behaviourTreeRunner.RegisterEvent<object>(eventName.sharedValue, ReceivedEvent);
+                behaviourTreeRunner.RegisterEvent<object, object>(eventName.sharedValue, ReceivedEvent);
             }
         }
 
@@ -35,6 +37,7 @@ namespace BehaviourTreeEditor.BTree.Conditionals
             {
                 behaviourTreeRunner.UnRegisterEvent(eventName.sharedValue, ReceivedEvent);
                 behaviourTreeRunner.UnRegisterEvent<object>(eventName.sharedValue, ReceivedEvent);
+                behaviourTreeRunner.UnRegisterEvent<object, object>(eventName.sharedValue, ReceivedEvent);
                 hasRegistered = false;
             }
 
@@ -47,12 +50,27 @@ namespace BehaviourTreeEditor.BTree.Conditionals
             hasReceived = true;
         }
 
+//todo: frequently unboxing
         private void ReceivedEvent(object arg1)
         {
             ReceivedEvent();
-            if (receivedMessage != null)
+            if (receivedArg1 != null)
             {
-                receivedMessage.sharedValue = (string)arg1;
+                Debug.Log($"ReceivedEvent {arg1}");
+                receivedArg1.SetValue(arg1);
+            }
+        }
+        
+        private void ReceivedEvent(object arg1, object arg2)
+        {
+            ReceivedEvent();
+            if (receivedArg1 != null)
+            {
+                receivedArg1.SetValue(arg1);
+            }
+            if (receivedArg2 != null)
+            {
+                receivedArg2.SetValue(arg2);
             }
         }
     }
