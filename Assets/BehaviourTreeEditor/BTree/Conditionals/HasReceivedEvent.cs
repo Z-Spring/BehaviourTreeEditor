@@ -50,13 +50,11 @@ namespace BehaviourTreeEditor.BTree.Conditionals
             hasReceived = true;
         }
 
-//todo: frequently unboxing
         private void ReceivedEvent(object arg1)
         {
             ReceivedEvent();
             if (receivedArg1 != null)
             {
-                Debug.Log($"ReceivedEvent {arg1}");
                 receivedArg1.SetValue(arg1);
             }
         }
