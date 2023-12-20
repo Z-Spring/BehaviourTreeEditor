@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using BehaviourTreeEditor.RunTime;
+using UnityEngine;
 
 namespace BehaviourTreeEditor.SharedVariables
 {
-    public class SharedObject : SharedVariable
+    public class SharedObject : SharedVariable<Object>
     {
-        public Object sharedValue;
     }
 }

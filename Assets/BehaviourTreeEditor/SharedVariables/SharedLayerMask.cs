@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+﻿using BehaviourTreeEditor.RunTime;
+using UnityEngine;
 
 namespace BehaviourTreeEditor.SharedVariables
 {
-    public class SharedLayerMask : SharedVariable
+    public class SharedLayerMask : SharedVariable<LayerMask>
     {
-        public LayerMask sharedValue;
+        public static implicit operator SharedLayerMask(LayerMask value)
+        {
+            var sharedVariable = CreateInstance<SharedLayerMask>();
+            sharedVariable.SetValue(value);
+            return sharedVariable;
+        }
     }
 }

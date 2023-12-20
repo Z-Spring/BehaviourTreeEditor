@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+﻿using BehaviourTreeEditor.RunTime;
+using UnityEngine;
 
 namespace BehaviourTreeEditor.SharedVariables
 {
-    public class SharedCollider : SharedVariable
+    public class SharedCollider : SharedVariable<Collider>
     {
-        public Collider sharedValue;
+        public static implicit operator SharedCollider(Collider value)
+        {
+            SharedCollider sharedCollider = CreateInstance<SharedCollider>();
+            sharedCollider.sharedValue = value;
+            return sharedCollider;
+        }
     }
 }

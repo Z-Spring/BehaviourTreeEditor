@@ -1,7 +1,14 @@
-﻿namespace BehaviourTreeEditor.SharedVariables
+﻿using BehaviourTreeEditor.RunTime;
+
+namespace BehaviourTreeEditor.SharedVariables
 {
-    public class SharedFloat : SharedVariable
+    public class SharedFloat : SharedVariable<float>
     {
-        public float sharedValue;
+        public static implicit operator SharedFloat(float value)
+        {
+            SharedFloat sharedFloat = CreateInstance<SharedFloat>();
+            sharedFloat.sharedValue = value;
+            return sharedFloat;
+        }
     }
 }

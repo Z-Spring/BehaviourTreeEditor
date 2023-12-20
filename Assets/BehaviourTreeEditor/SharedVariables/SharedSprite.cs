@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+﻿using BehaviourTreeEditor.RunTime;
+using UnityEngine;
 
 namespace BehaviourTreeEditor.SharedVariables
 {
-    public class SharedSprite : SharedVariable
+    public class SharedSprite : SharedVariable<Sprite>
     {
-        public Sprite sharedValue;
+        public static implicit operator SharedSprite(Sprite value)
+        {
+            SharedSprite sharedSprite = CreateInstance<SharedSprite>();
+            sharedSprite.sharedValue = value;
+            return sharedSprite;
+        }
     }
 }

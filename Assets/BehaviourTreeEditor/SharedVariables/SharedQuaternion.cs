@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+﻿using BehaviourTreeEditor.RunTime;
+using UnityEngine;
 
 namespace BehaviourTreeEditor.SharedVariables
 {
-    public class SharedQuaternion : SharedVariable
+    public class SharedQuaternion : SharedVariable<Quaternion>
     {
-        public Quaternion sharedValue;
+        public static implicit operator SharedQuaternion(Quaternion value)
+        {
+            SharedQuaternion sharedQuaternion = CreateInstance<SharedQuaternion>();
+            sharedQuaternion.sharedValue = value;
+            return sharedQuaternion;
+        }
     }
 }

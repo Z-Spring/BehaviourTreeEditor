@@ -1,11 +1,15 @@
-﻿using UnityEngine;
-using UnityEngine.Serialization;
+﻿using BehaviourTreeEditor.RunTime;
+using UnityEngine;
 
 namespace BehaviourTreeEditor.SharedVariables
 {
-    [CreateAssetMenu(fileName = "SharedGameObject", menuName = "Behavior Tree/Shared Variables/GameObject", order = 0)]
-    public class SharedGameObject : SharedVariable
+    public class SharedGameObject : SharedVariable<GameObject>
     {
-        [FormerlySerializedAs("SharedValue")] public GameObject sharedValue;
+        public static implicit operator SharedGameObject(GameObject value)
+        {
+            SharedGameObject sharedGameObject = CreateInstance<SharedGameObject>();
+            sharedGameObject.sharedValue = value;
+            return sharedGameObject;
+        }
     }
 }

@@ -1,7 +1,14 @@
-﻿namespace BehaviourTreeEditor.SharedVariables
+﻿using BehaviourTreeEditor.RunTime;
+
+namespace BehaviourTreeEditor.SharedVariables
 {
-    public class SharedBool : SharedVariable
+    public class SharedBool : SharedVariable<bool>
     {
-        public bool sharedValue;
+        public static implicit operator SharedBool(bool value)
+        {
+            SharedBool sharedBool = CreateInstance<SharedBool>();
+            sharedBool.sharedValue = value;
+            return sharedBool;
+        }
     }
 }

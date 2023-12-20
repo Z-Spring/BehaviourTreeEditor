@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using BehaviourTreeEditor.RunTime;
 
 namespace BehaviourTreeEditor.SharedVariables
 {
-    [CreateAssetMenu(fileName = "SharedString", menuName = "Behavior Tree/Shared Variables/string", order = 0)]
-    public class SharedString : SharedVariable
+    public class SharedString : SharedVariable<string>
     {
-        public string sharedValue;
+        public static implicit operator SharedString(string value)
+        {
+            SharedString sharedString = CreateInstance<SharedString>();
+            sharedString.sharedValue = value;
+            return sharedString;
+        }
     }
 }
