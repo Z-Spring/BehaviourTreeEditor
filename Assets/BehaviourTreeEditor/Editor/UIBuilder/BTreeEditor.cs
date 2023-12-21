@@ -103,7 +103,6 @@ namespace Editor
 
         void AddBehaviourTreeRunnerComponent()
         {
-            // todo: whether check selected object is a gameObject?
             addRunnerButton.tooltip = "Add Behaviour Tree Runner Component";
             addRunnerButton.clicked += () =>
             {
@@ -113,9 +112,29 @@ namespace Editor
                     return;
                 }
 
-                runner.AddComponent<BehaviourTreeRunner>();
+                var behaviourTreeRunner = runner.AddComponent<BehaviourTreeRunner>();
+                InitBehaviourTree(behaviourTreeRunner);
                 OnSelectionChange();
             };
+        }
+
+        void InitBehaviourTree(BehaviourTreeRunner behaviourTreeRunner)
+        {
+            if (behaviourTreeRunner.tree == null)
+            {
+                behaviourTreeRunner.tree = CreateInstance<BehaviourTree>();
+                if (Selection.activeObject is GameObject gameObject)
+                {
+                    behaviourTreeRunner.treeName = $"{gameObject.name}";
+                    behaviourTreeRunner.tree.name = behaviourTreeRunner.treeName;
+                }
+
+                BehaviourTreeRunnerEditor.previousTreeName = behaviourTreeRunner.treeName;
+                PlayerPrefs.SetString("previousTreeName", BehaviourTreeRunnerEditor.previousTreeName);
+                AssetDatabase.CreateAsset(behaviourTreeRunner.tree, $"Assets/{behaviourTreeRunner.treeName}.asset");
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
         }
 
         void DeleteBehaviourTreeRunnerComponent()
