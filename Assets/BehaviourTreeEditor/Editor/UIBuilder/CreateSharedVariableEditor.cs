@@ -197,12 +197,6 @@ namespace Editor
             string assetPath = AssetResourceManager.GetSharedVariableContainerAssetPath(treeName);
 
             SharedVariableContainer sv = AssetResourceManager.LoadAsset<SharedVariableContainer>(assetPath);
-            if (sv == null)
-            {
-                AssetResourceManager.CreateScriptObjectAsset<SharedVariableContainer>(assetPath);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            }
 
             return sv;
         }
@@ -214,7 +208,6 @@ namespace Editor
             scrollView.Clear();
             string assetPath = AssetResourceManager.GetSharedVariableContainerAssetPath(treeName);
             var variables = AssetResourceManager.LoadAllAssets<SharedVariable>(assetPath);
-
             foreach (var variable in variables)
             {
                 DisplaySharedVariableInIMGUI(variable);
