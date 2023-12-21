@@ -194,7 +194,6 @@ namespace Editor
 
         public SharedVariableContainer LoadSharedVariableContainerAsset(string treeName)
         {
-            // string treeName = GetTreeName();
             string assetPath = AssetResourceManager.GetSharedVariableContainerAssetPath(treeName);
 
             SharedVariableContainer sv = AssetResourceManager.LoadAsset<SharedVariableContainer>(assetPath);
@@ -210,17 +209,6 @@ namespace Editor
 
         public void InitializeVariableEditors(string treeName, VisualElement root)
         {
-            // editorList.Clear();
-            // scrollView = root.Q<ScrollView>();
-            // scrollView.Clear();
-            // if (sv.sharedVariables.Count > 0)
-            //     sv.sharedVariables.ForEach(v => Debug.Log(v.name));
-            //     // sv.sharedVariables.ForEach(DisplaySharedVariableInIMGUI);
-            // else
-            // {
-            //     Debug.Log("sv.sharedVariables.Count <= 0");
-            // }
-
             editorList.Clear();
             scrollView = root.Q<ScrollView>();
             scrollView.Clear();
