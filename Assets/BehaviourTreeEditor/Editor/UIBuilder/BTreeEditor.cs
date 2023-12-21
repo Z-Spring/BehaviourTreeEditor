@@ -131,7 +131,8 @@ namespace Editor
 
                 BehaviourTreeRunnerEditor.previousTreeName = behaviourTreeRunner.treeName;
                 PlayerPrefs.SetString("previousTreeName", BehaviourTreeRunnerEditor.previousTreeName);
-                AssetDatabase.CreateAsset(behaviourTreeRunner.tree, $"Assets/{behaviourTreeRunner.treeName}.asset");
+                string path = AssetResourceManager.GetBehaviourTreeAssetPath(behaviourTreeRunner.treeName);
+                AssetDatabase.CreateAsset(behaviourTreeRunner.tree, path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
@@ -162,7 +163,8 @@ namespace Editor
 
         void DeleteRelatedAssets(BehaviourTreeRunner behaviourTreeRunner, string treeName)
         {
-            string treeAssetPath = AssetDatabase.GetAssetPath(behaviourTreeRunner.tree);
+            // string treeAssetPath = AssetDatabase.GetAssetPath(behaviourTreeRunner.tree);
+            string treeAssetPath = AssetResourceManager.GetBehaviourTreeAssetPath(treeName);
             string sharedVariableContainerAssetPath =
                 AssetResourceManager.GetSharedVariableContainerAssetPath(treeName);
             AssetDatabase.DeleteAsset(sharedVariableContainerAssetPath);
