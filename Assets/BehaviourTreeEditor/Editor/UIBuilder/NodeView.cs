@@ -13,7 +13,7 @@ namespace Editor
         public NodePort InputNodePort;
         public NodePort OutputNodePort;
         public Action<NodeView> OnNodeSelected;
-        
+
         public NodeView(BehaviourTreeEditor.BTree.Node node) : base(AssetResourceManager.NodeViewUXMLPath)
         {
             this.node = node;
@@ -62,6 +62,18 @@ namespace Editor
             node.position.x = newPos.xMin;
             node.position.y = newPos.yMin;
             EditorUtility.SetDirty(node);
+        }
+
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            base.BuildContextualMenu(evt);
+            evt.menu.AppendAction("Edit Script", _ =>
+            {
+               MonoScript script = MonoScript.FromScriptableObject(node);
+               AssetDatabase.OpenAsset(script);
+            }, DropdownMenuAction.AlwaysEnabled);
+            
+            evt.menu.AppendSeparator();
         }
 
         void CreateInputPorts()
