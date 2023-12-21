@@ -39,6 +39,7 @@ namespace Editor
             behaviourTreeRunner.treeDescription =
                 EditorGUILayout.TextArea(behaviourTreeRunner.treeDescription, GUILayout.MinHeight(60));
             InitBehaviourTree();
+            // todo: change label name when tree name changes
             // ChangeLabelName();
             AddButton();
         }
@@ -71,16 +72,18 @@ namespace Editor
         {
             if (behaviourTreeRunner.tree == null)
             {
+                Debug.Log("InitBehaviourTree");
                 behaviourTreeRunner.tree = CreateInstance<BehaviourTree>();
                 if (Selection.activeObject is GameObject gameObject)
                 {
                     behaviourTreeRunner.treeName = $"{gameObject.name}";
                     behaviourTreeRunner.tree.name = behaviourTreeRunner.treeName;
                 }
-                
+
                 previousTreeName = behaviourTreeRunner.treeName;
                 PlayerPrefs.SetString("previousTreeName", previousTreeName);
-                AssetDatabase.CreateAsset(behaviourTreeRunner.tree, $"Assets/{behaviourTreeRunner.treeName}.asset");
+                string path = AssetResourceManager.GetBehaviourTreeAssetPath(behaviourTreeRunner.treeName);
+                AssetDatabase.CreateAsset(behaviourTreeRunner.tree, path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
@@ -90,9 +93,10 @@ namespace Editor
         {
             if (behaviourTreeRunner.treeName != previousTreeName)
             {
-                if (AssetDatabase.LoadAssetAtPath<BehaviourTree>($"Assets/{previousTreeName}.asset") != null)
+                string previousTreePath = AssetResourceManager.GetBehaviourTreeAssetPath(previousTreeName);
+                if (AssetDatabase.LoadAssetAtPath<BehaviourTree>(previousTreePath) != null)
                 {
-                    AssetDatabase.RenameAsset($"Assets/{previousTreeName}.asset", behaviourTreeRunner.treeName);
+                    AssetDatabase.RenameAsset(previousTreePath, behaviourTreeRunner.treeName);
                 }
 
                 previousTreeName = behaviourTreeRunner.treeName;
