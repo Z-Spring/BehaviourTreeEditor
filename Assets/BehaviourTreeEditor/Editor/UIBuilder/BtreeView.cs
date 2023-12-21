@@ -7,20 +7,19 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Node = UnityEditor.Experimental.GraphView.Node;
 
 public class BtreeView : GraphView
 {
+    public Action<NodeView> OnNodeSelected;
+    public static MyEdgeConnectorListener listener;
+    public static event System.Action OnCreateTree;
+    public bool HasUnsavedChanges { get; set; }
     BehaviourTree tree;
     Vector2 mousePosition;
-    public Action<NodeView> OnNodeSelected;
-    public static MyEdgeConnectorListener Listener;
-    private Button saveButton;
-    public bool UnsavedChanges { get; set; }
+    Button saveButton;
+    string originalTitleText;
 
-    private string originalTitleText;
-
-    // BTreeEditor ` = ScriptableObject.CreateInstance<BTreeEditor>();
-    // EditorWindow editorWindow ;
     EditorWindow editorWindow => EditorWindow.GetWindow<BTreeEditor>();
 
     public new class UxmlFactory : UxmlFactory<BtreeView, UxmlTraits>
@@ -41,6 +40,7 @@ public class BtreeView : GraphView
 
     void OnUndoRedo()
     {
+        Debug.Log("OnUndoRedo");
         PopulateView(tree);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -63,7 +63,7 @@ public class BtreeView : GraphView
 
     public void SaveNodeAsset()
     {
-        UnsavedChanges = false;
+        HasUnsavedChanges = false;
         UpdateTitleView();
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -72,17 +72,17 @@ public class BtreeView : GraphView
     void OnDataChanged()
     {
         //
-        UnsavedChanges = true;
+        HasUnsavedChanges = true;
         UpdateTitleView();
     }
 
     private void UpdateTitleView()
     {
-        if (UnsavedChanges && !editorWindow.titleContent.text.Contains("*"))
+        if (HasUnsavedChanges && !editorWindow.titleContent.text.Contains("*"))
         {
             editorWindow.titleContent.text += "*";
         }
-        else if (!UnsavedChanges && editorWindow.titleContent.text.Contains("*"))
+        else if (!HasUnsavedChanges && editorWindow.titleContent.text.Contains("*"))
         {
             editorWindow.titleContent.text = originalTitleText;
         }
@@ -98,7 +98,6 @@ public class BtreeView : GraphView
 
         if (evt.modifiers == EventModifiers.Control && evt.keyCode == KeyCode.D)
         {
-            Debug.Log("DuplicateNode Success!");
             DuplicateNode();
         }
     }
@@ -131,20 +130,21 @@ public class BtreeView : GraphView
     public void PopulateView(BehaviourTree behaviourTree)
     {
         tree = behaviourTree;
-        Listener = new MyEdgeConnectorListener(this);
+        listener = new MyEdgeConnectorListener(this);
 
         graphViewChanged -= OnGraphViewChanged;
         DeleteElements(graphElements);
         graphViewChanged += OnGraphViewChanged;
         if (tree == null)
         {
-            Debug.Log("tree is null");
             return;
         }
+
         if (tree.rootNode == null)
         {
             CreateRootNode();
         }
+
 
         // // 方法组转换 创建节点
         tree.nodes.ForEach(InitNodeView);
@@ -265,11 +265,22 @@ public class BtreeView : GraphView
     // 创建右键菜单选项
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
     {
-        evt.menu.AppendAction("CopyNode\tCtrl+D", a => DuplicateNode());
-        evt.menu.AppendAction("SelectNode\tSpace", a => ShowAddNodeMenuFromMouseClick());
-        evt.menu.AppendAction("CreateNode/Action Node", a => CreateNodeTemplateScript(scriptPaths[0]));
-        evt.menu.AppendAction("CreateNode/Composite Node", a => CreateNodeTemplateScript(scriptPaths[1]));
-        evt.menu.AppendAction("CreateNode/Decorator Node", a => CreateNodeTemplateScript(scriptPaths[2]));
+        if (evt.target is Node)
+        {
+            evt.menu.AppendAction("Copy Node\tCtrl+D", a => DuplicateNode());
+            return;
+        }
+
+        if (tree == null)
+        {
+            evt.menu.AppendAction("Create Tree", _ => OnCreateTree?.Invoke());
+            return;
+        }
+
+        evt.menu.AppendAction("Add Node\tSpace", a => ShowAddNodeMenuFromMouseClick());
+        evt.menu.AppendAction("Create Node/Action Node", a => CreateNodeTemplateScript(scriptPaths[0]));
+        evt.menu.AppendAction("Create Node/Composite Node", a => CreateNodeTemplateScript(scriptPaths[1]));
+        evt.menu.AppendAction("Create Node/Decorator Node", a => CreateNodeTemplateScript(scriptPaths[2]));
     }
 
     BehaviourTreeEditor.BTree.Node CloneNode(BehaviourTreeEditor.BTree.Node node)
@@ -285,8 +296,6 @@ public class BtreeView : GraphView
     {
         if (selection.Count >= 1)
         {
-            // ClearSelection();
-            // int index = 1;
             selection.ForEach(s =>
             {
                 if (s is NodeView nodeView)
@@ -294,10 +303,7 @@ public class BtreeView : GraphView
                     Vector2 currentPosition = nodeView.GetPosition().position;
                     BehaviourTreeEditor.BTree.Node node = CloneNode(nodeView.node);
 
-                    // var offset = new Vector2(index * 100, 0);
                     CreateNodeViewForDuplicate(node, new Vector2(currentPosition.x + 100, currentPosition.y + 100));
-
-                    // index++;
                 }
             });
         }
@@ -335,7 +341,7 @@ public class BtreeView : GraphView
         }
         else
         {
-            Debug.LogError("BehaviourTree is null! You can select a tree in the project window or create a new one. ");
+            Debug.LogError("BehaviourTree is null! You should create a new one first! ");
         }
     }
 
@@ -357,15 +363,15 @@ public class BtreeView : GraphView
 
     void CreateNodeViewFromDropOutside(NodeView lastNodeView)
     {
-        if (Listener.MyNodePort != null)
+        if (listener.MyNodePort != null)
         {
-            var outputNodePort = Listener.MyNodePort;
+            var outputNodePort = listener.MyNodePort;
             var edge = outputNodePort.ConnectTo(lastNodeView?.InputNodePort);
             AddElement(edge);
             var connectorListener = new DefaultEdgeConnectorListener();
             connectorListener.OnDrop(this, edge);
             // Listener.OnDrop(this, edge);
-            Listener.MyNodePort = null;
+            listener.MyNodePort = null;
         }
     }
 

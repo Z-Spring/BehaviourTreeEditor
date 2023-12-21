@@ -31,7 +31,7 @@ namespace Editor
         private void OnEnable()
         {
             GetNodeTypes();
-
+            BtreeView.OnCreateTree += AddRunnerComponent;
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
@@ -39,6 +39,7 @@ namespace Editor
         private void OnDisable()
         {
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            BtreeView.OnCreateTree -= AddRunnerComponent;
         }
 
         [MenuItem("BTreeEditor/Show Window")]
@@ -51,7 +52,6 @@ namespace Editor
         public void CreateGUI()
         {
             root = rootVisualElement;
-
             LoadUIAssets();
             InitializeEditorWindowElements();
             AddBehaviourTreeRunnerComponent();
@@ -62,7 +62,11 @@ namespace Editor
             createSharedVariableEditor = new CreateSharedVariableEditor();
             UpdateCurrentSharedVariableView(treeName);
             createSharedVariableEditor.CreateSharedVariableDropdownField(root);
-            createSharedVariableEditor.AddVariable(root, sharedVariableContainer);
+            if (sharedVariableContainer != null)
+            {
+                createSharedVariableEditor.AddVariable(root, sharedVariableContainer);
+            }
+
             OnSelectionChange();
         }
 
@@ -104,38 +108,46 @@ namespace Editor
         void AddBehaviourTreeRunnerComponent()
         {
             addRunnerButton.tooltip = "Add Behaviour Tree Runner Component";
-            addRunnerButton.clicked += () =>
-            {
-                var runner = Selection.activeGameObject;
-                if (runner.GetComponent<BehaviourTreeRunner>())
-                {
-                    return;
-                }
+            addRunnerButton.clicked += AddRunnerComponent;
+        }
 
-                var behaviourTreeRunner = runner.AddComponent<BehaviourTreeRunner>();
-                InitBehaviourTree(behaviourTreeRunner);
-                OnSelectionChange();
-            };
+        void AddRunnerComponent()
+        {
+            var runner = Selection.activeGameObject;
+            if (runner.GetComponent<BehaviourTreeRunner>())
+            {
+                return;
+            }
+
+            var behaviourTreeRunner = runner.AddComponent<BehaviourTreeRunner>();
+            InitBehaviourTree(behaviourTreeRunner);
+            InitSharedVariableContainer(behaviourTreeRunner);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            OnSelectionChange();
         }
 
         void InitBehaviourTree(BehaviourTreeRunner behaviourTreeRunner)
         {
-            if (behaviourTreeRunner.tree == null)
-            {
-                behaviourTreeRunner.tree = CreateInstance<BehaviourTree>();
-                if (Selection.activeObject is GameObject gameObject)
-                {
-                    behaviourTreeRunner.treeName = $"{gameObject.name}";
-                    behaviourTreeRunner.tree.name = behaviourTreeRunner.treeName;
-                }
+            if (behaviourTreeRunner.tree != null) return;
 
-                BehaviourTreeRunnerEditor.previousTreeName = behaviourTreeRunner.treeName;
-                PlayerPrefs.SetString("previousTreeName", BehaviourTreeRunnerEditor.previousTreeName);
-                string path = AssetResourceManager.GetBehaviourTreeAssetPath(behaviourTreeRunner.treeName);
-                AssetDatabase.CreateAsset(behaviourTreeRunner.tree, path);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
+            behaviourTreeRunner.tree = CreateInstance<BehaviourTree>();
+            if (Selection.activeObject is GameObject gameObject)
+            {
+                behaviourTreeRunner.treeName = $"{gameObject.name}";
+                behaviourTreeRunner.tree.name = behaviourTreeRunner.treeName;
             }
+
+            BehaviourTreeRunnerEditor.previousTreeName = behaviourTreeRunner.treeName;
+            PlayerPrefs.SetString("previousTreeName", BehaviourTreeRunnerEditor.previousTreeName);
+            string path = AssetResourceManager.GetBehaviourTreeAssetPath(behaviourTreeRunner.treeName);
+            AssetDatabase.CreateAsset(behaviourTreeRunner.tree, path);
+        }
+
+        void InitSharedVariableContainer(BehaviourTreeRunner behaviourTreeRunner)
+        {
+            string assetPath = AssetResourceManager.GetSharedVariableContainerAssetPath(behaviourTreeRunner.treeName);
+            AssetResourceManager.CreateScriptObjectAsset<SharedVariableContainer>(assetPath);
         }
 
         void DeleteBehaviourTreeRunnerComponent()
@@ -186,14 +198,17 @@ namespace Editor
                 var runner = Selection.activeGameObject.GetComponent<BehaviourTreeRunner>();
                 if (runner)
                 {
-                    // todo: inspectorView.PopulateView(null);
+                    //  inspectorView.PopulateView(null);
                     tree = runner.tree;
                     selectedTreeName = runner.treeName;
-
                     treeView.PopulateView(tree);
                     treeView.AutoFrameNode();
 
                     UpdateCurrentSharedVariableView(selectedTreeName);
+                }
+                else
+                {
+                    tree = null;
                 }
             }
 
@@ -208,7 +223,7 @@ namespace Editor
             else
             {
                 // when select a treeAsset, display tree
-                if (tree != null && /*todo: dont understand*/
+                if (tree != null &&
                     AssetDatabase.CanOpenAssetInEditor(tree.GetInstanceID()))
                 {
                     treeView.PopulateView(tree);
