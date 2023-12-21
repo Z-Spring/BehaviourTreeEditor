@@ -16,7 +16,6 @@ namespace BehaviourTreeEditor.BTree
 
         public Node.State Update()
         {
-            
             if (rootNode.state is Node.State.Running)
             {
                 treeState = rootNode.Update();
@@ -33,12 +32,10 @@ namespace BehaviourTreeEditor.BTree
             node.guid = Guid.NewGuid().ToString();
             Undo.RecordObject(this, $"Behaviour Tree Add {node.name} node");
             nodes.Add(node);
-
             if (!Application.isPlaying)
             {
                 AssetDatabase.AddObjectToAsset(node, this);
             }
-
             Undo.RegisterCreatedObjectUndo(node, $"Behaviour Tree Add {node.name} node");
             // AssetDatabase.SaveAssets();
             // AssetDatabase.Refresh();

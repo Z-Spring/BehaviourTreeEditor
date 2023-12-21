@@ -72,7 +72,6 @@ namespace Editor
         {
             if (behaviourTreeRunner.tree == null)
             {
-                Debug.Log("InitBehaviourTree");
                 behaviourTreeRunner.tree = CreateInstance<BehaviourTree>();
                 if (Selection.activeObject is GameObject gameObject)
                 {

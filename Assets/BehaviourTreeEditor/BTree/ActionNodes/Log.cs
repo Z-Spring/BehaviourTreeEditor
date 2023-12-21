@@ -18,7 +18,7 @@ namespace BehaviourTreeEditor.BTree.ActionNodes
 
         protected override State OnUpdate()
         {
-            Debug.Log($"{messagePrint.sharedValue }  ");
+            Debug.Log($"{number.sharedValue }  ");
             return State.Success;
         }
     }

@@ -70,7 +70,7 @@ namespace Editor
         public NodePort(Direction direction, Capacity capacity) : base(Orientation.Vertical, direction, capacity,
             typeof(bool))
         {
-            this.AddManipulator(new EdgeConnector<Edge>(BtreeView.Listener));
+            this.AddManipulator(new EdgeConnector<Edge>(BtreeView.listener));
             var connectorListener = new DefaultEdgeConnectorListener();
             m_EdgeConnector = new EdgeConnector<Edge>(connectorListener);
             this.AddManipulator(m_EdgeConnector);

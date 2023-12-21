@@ -14,8 +14,8 @@ namespace BehaviourTreeEditor.BTree
         }
 
         public string nodeName;
-
         public State state = State.Running;
+        
         [HideInInspector] public bool started;
         [HideInInspector] public string guid;
         [HideInInspector] public Vector2 position;
@@ -23,8 +23,6 @@ namespace BehaviourTreeEditor.BTree
         [HideInInspector] public CurrentGameContext currentGameContext;
         [HideInInspector] public Node parent;
 
-        // todo: can add agent
-        // public AIAgent agent;
         public State Update()
         {
             if (!started)
