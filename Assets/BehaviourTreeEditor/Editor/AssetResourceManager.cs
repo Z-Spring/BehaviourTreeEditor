@@ -9,12 +9,13 @@ namespace Editor
         public const string BTEditorUXMLPath = "Assets/BehaviourTreeEditor/Editor/UIBuilder/BTreeEditor.uxml";
         public const string BTEditorUSSPath = "Assets/BehaviourTreeEditor/Editor/UIBuilder/BTreeEditor.uss";
         public const string NodeViewUXMLPath = "Assets/BehaviourTreeEditor/Editor/UIBuilder/NodeView.uxml";
-        
+        public const string IconPath = "Assets/BehaviourTreeEditor/Gizmos/Icon.png";
+
         public static string GetSharedVariableContainerAssetPath(string treeName)
         {
             return $"{RootBehaviourTreeEditorPath}/{treeName}_SharedVariableContainer.asset";
         }
-        
+
         public static string GetBehaviourTreeAssetPath(string treeName)
         {
             return $"{RootBehaviourTreeEditorPath}/{treeName}.asset";
@@ -30,7 +31,7 @@ namespace Editor
         {
             return UnityEditor.AssetDatabase.LoadAssetAtPath<T>(path);
         }
-        
+
         public static T[] LoadAllAssets<T>(string path) where T : Object
         {
             return UnityEditor.AssetDatabase.LoadAllAssetsAtPath(path).OfType<T>().ToArray();
