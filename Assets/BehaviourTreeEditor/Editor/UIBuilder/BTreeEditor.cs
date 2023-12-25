@@ -22,7 +22,7 @@ namespace Editor
         ToolbarButton deleteRunnerButton;
         ToolbarButton addRunnerButton;
         SharedVariableContainer sharedVariableContainer;
-
+        Texture2D icon;
         static BehaviourTree tree;
         public static List<Type> nodeTypes = new();
         public static string selectedTreeName;
@@ -31,6 +31,7 @@ namespace Editor
         private void OnEnable()
         {
             GetNodeTypes();
+            icon = AssetResourceManager.LoadAsset<Texture2D>(AssetResourceManager.IconPath);
             BtreeView.OnCreateTree += AddRunnerComponent;
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
@@ -86,7 +87,6 @@ namespace Editor
             inspectorView = root.Q<InspectorView>();
             deleteRunnerButton = root.Q<ToolbarButton>("DeleteRunner");
             addRunnerButton = root.Q<ToolbarButton>("AddRunner");
-
             root.Q<Button>("SaveAsset").RegisterCallback<ClickEvent>(evt => treeView.SaveNodeAsset());
         }
 
@@ -111,6 +111,9 @@ namespace Editor
             addRunnerButton.clicked += AddRunnerComponent;
         }
 
+        int selectedGameObjectInstanceID;
+            
+
         void AddRunnerComponent()
         {
             var runner = Selection.activeGameObject;
@@ -120,11 +123,37 @@ namespace Editor
             }
 
             var behaviourTreeRunner = runner.AddComponent<BehaviourTreeRunner>();
+            selectedGameObjectInstanceID = runner.GetInstanceID();
+            AddIconToGameObject();
             InitBehaviourTree(behaviourTreeRunner);
             InitSharedVariableContainer(behaviourTreeRunner);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             OnSelectionChange();
+        }
+
+        void AddIconToGameObject()
+        {
+            EditorApplication.hierarchyWindowItemOnGUI += AddIcon;
+        }
+
+        void DeleteIconFromGameObject()
+        {
+            EditorApplication.hierarchyWindowItemOnGUI -= AddIcon;
+        }
+
+        void AddIcon(int instanceId, Rect selectionRect)
+        {
+            if (instanceId != selectedGameObjectInstanceID)
+            {
+                return;
+            }
+
+            Rect rect = new Rect(selectionRect);
+            rect.x = rect.width + (selectionRect.x - 20f);
+            rect.width = 20f;
+            rect.height = 18f;
+            GUI.Label(rect, icon);
         }
 
         void InitBehaviourTree(BehaviourTreeRunner behaviourTreeRunner)
@@ -155,6 +184,12 @@ namespace Editor
             deleteRunnerButton.tooltip = "Delete Behaviour Tree Runner Component";
             deleteRunnerButton.clicked += () =>
             {
+                if (Selection.activeGameObject == null)
+                {
+                    Debug.Log("Please select a GameObject before deleting Behaviour Tree Runner");
+                    return;
+                }
+
                 var runner = Selection.activeGameObject;
                 BehaviourTreeRunner behaviourTreeRunner = runner.GetComponent<BehaviourTreeRunner>();
                 if (behaviourTreeRunner)
@@ -169,6 +204,7 @@ namespace Editor
                     treeView.ResetView();
                     root.Query<Label>("BehaviourTreeName").First().text = "Click + To Add A Behaviour Tree Runner";
                     DeleteRelatedAssets(behaviourTreeRunner, treeName);
+                    DeleteIconFromGameObject();
                 }
             };
         }
