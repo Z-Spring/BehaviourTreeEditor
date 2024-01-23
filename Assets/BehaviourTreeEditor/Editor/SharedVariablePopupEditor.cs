@@ -34,7 +34,6 @@ namespace Editor
             }
         }
 
-
         public override void OnInspectorGUI()
         {
             var fields = GetCurrentNodeSharedVariableFields().ToList();
@@ -44,7 +43,7 @@ namespace Editor
 
         List<ScriptableObject> GetAllSharedVariableScriptableObjects()
         {
-            var relativeAssets = AssetDatabase.FindAssets($"{BTreeEditor.selectedTreeName}SharedVariableContainer ");
+            var relativeAssets = AssetDatabase.FindAssets($"{BTreeEditor.selectedTreeName}_SharedVariableContainer");
             var mainSharedVariableContainerPath = relativeAssets.FirstOrDefault();
             var mainSharedVariableContainer = AssetDatabase.GUIDToAssetPath(mainSharedVariableContainerPath);
             var allSharedVariableAssets = AssetDatabase.LoadAllAssetsAtPath(mainSharedVariableContainer);
