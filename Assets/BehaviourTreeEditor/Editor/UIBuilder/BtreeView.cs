@@ -355,8 +355,12 @@ public class BtreeView : GraphView
 
         NodeView nodeView = new NodeView(node);
         nodeView.OnNodeSelected = OnNodeSelected;
-        Vector2 nodeSize = new Vector2(500, 500);
-        nodeView.SetPosition(new Rect(graphMousePosition, nodeSize));
+        // this nodeSize is not the same as the nodeView's size, but very close
+        // don't know how to get the nodeView's size
+        Vector2 nodeSize = new Vector2(150, 76);
+        // calculate the center position of the nodeView
+        Vector2 adjustedPosition = graphMousePosition - nodeSize / 2;
+        nodeView.SetPosition(new Rect(adjustedPosition, nodeSize));
         AddElement(nodeView);
         CreateNodeViewFromDropOutside(nodeView);
     }
