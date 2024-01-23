@@ -1,4 +1,4 @@
-using BehaviourTreeEditor.SharedVariables;
+using BehaviourTreeEditor.BTree.SharedVariables;
 using UnityEngine;
 
 namespace BehaviourTreeEditor.BTree.ActionNodes

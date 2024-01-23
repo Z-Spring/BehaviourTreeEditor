@@ -1,6 +1,6 @@
 ﻿using System.CodeDom;
 using System.Reflection;
-using BehaviourTreeEditor.SharedVariables;
+using BehaviourTreeEditor.BTree.SharedVariables;
 using UnityEditor;
 using UnityEngine;
 

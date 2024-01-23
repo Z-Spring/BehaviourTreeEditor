@@ -1,7 +1,6 @@
-﻿using BehaviourTreeEditor.RunTime;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace BehaviourTreeEditor.SharedVariables
+namespace BehaviourTreeEditor.BTree.SharedVariables
 {
     public class SharedRect : SharedVariable<Rect>
     {

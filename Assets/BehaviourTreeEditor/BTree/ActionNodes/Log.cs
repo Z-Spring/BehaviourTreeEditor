@@ -1,13 +1,13 @@
-﻿using BehaviourTreeEditor.SharedVariables;
+﻿using BehaviourTreeEditor.BTree.SharedVariables;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace BehaviourTreeEditor.BTree.ActionNodes
 {
     public class Log : Action
     {
-        [FormerlySerializedAs("message")] public SharedString messagePrint;
+        public SharedString messagePrint;
         public SharedInt number;
+
         protected override void OnEnter()
         {
         }
@@ -18,7 +18,7 @@ namespace BehaviourTreeEditor.BTree.ActionNodes
 
         protected override State OnUpdate()
         {
-            Debug.Log($"{number.sharedValue }  ");
+            Debug.Log($"{messagePrint.sharedValue}  ");
             return State.Success;
         }
     }

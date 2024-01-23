@@ -1,9 +1,7 @@
 ﻿using System;
-using BehaviourTreeEditor.BTree;
-using BehaviourTreeEditor.SharedVariables;
+using BehaviourTreeEditor.BTree.SharedVariables;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Editor
 {

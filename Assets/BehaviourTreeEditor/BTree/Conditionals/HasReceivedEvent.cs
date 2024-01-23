@@ -1,6 +1,4 @@
-﻿using BehaviourTreeEditor.SharedVariables;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using BehaviourTreeEditor.BTree.SharedVariables;
 
 namespace BehaviourTreeEditor.BTree.Conditionals
 {
@@ -58,7 +56,7 @@ namespace BehaviourTreeEditor.BTree.Conditionals
                 receivedArg1.SetValue(arg1);
             }
         }
-        
+
         private void ReceivedEvent(object arg1, object arg2)
         {
             ReceivedEvent();
@@ -66,6 +64,7 @@ namespace BehaviourTreeEditor.BTree.Conditionals
             {
                 receivedArg1.SetValue(arg1);
             }
+
             if (receivedArg2 != null)
             {
                 receivedArg2.SetValue(arg2);

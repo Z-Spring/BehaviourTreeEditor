@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BehaviourTreeEditor.BTree;
-using BehaviourTreeEditor.SharedVariables;
+using BehaviourTreeEditor.BTree.SharedVariables;
 using UnityEditor;
 using UnityEngine;
 

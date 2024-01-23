@@ -1,6 +1,4 @@
-﻿using BehaviourTreeEditor.RunTime;
-
-namespace BehaviourTreeEditor.SharedVariables
+﻿namespace BehaviourTreeEditor.BTree.SharedVariables
 {
     public class SharedString : SharedVariable<string>
     {

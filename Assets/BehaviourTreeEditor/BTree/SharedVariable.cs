@@ -1,6 +1,6 @@
-﻿using BehaviourTreeEditor.SharedVariables;
+﻿using BehaviourTreeEditor.BTree.SharedVariables;
 
-namespace BehaviourTreeEditor.RunTime
+namespace BehaviourTreeEditor.BTree
 {
     public abstract class SharedVariable<T> : SharedVariable
     {

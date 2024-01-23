@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BehaviourTreeEditor.BTree;
-using BehaviourTreeEditor.BTree.ActionNodes;
 using BehaviourTreeEditor.BTree.ParentSharedVariable;
-using BehaviourTreeEditor.SharedVariables;
+using BehaviourTreeEditor.BTree.SharedVariables;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;

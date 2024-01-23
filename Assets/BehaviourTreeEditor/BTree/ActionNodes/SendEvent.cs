@@ -1,17 +1,18 @@
-﻿using BehaviourTreeEditor.SharedVariables;
+﻿using BehaviourTreeEditor.BTree.SharedVariables;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace BehaviourTreeEditor.BTree.ActionNodes
 {
     public class SendEvent : Action
     {
         public SharedGameObject targetGameObject;
+
         public SharedString eventName;
+
         // send arguments
         public SharedVariable sendArg1;
         public SharedVariable sendArg2;
-        
+
         BehaviourTreeRunner behaviourTreeRunner;
 
         protected override void OnEnter()
@@ -29,7 +30,6 @@ namespace BehaviourTreeEditor.BTree.ActionNodes
 
         protected override State OnUpdate()
         {
-
             if (sendArg1 == null)
             {
                 behaviourTreeRunner.SendEvent(eventName.sharedValue);
@@ -45,7 +45,7 @@ namespace BehaviourTreeEditor.BTree.ActionNodes
                     behaviourTreeRunner.SendEvent(eventName.sharedValue, sendArg1.GetValue(), sendArg2.GetValue());
                 }
             }
-           
+
 
             return State.Success;
         }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BehaviourTreeEditor.SharedVariables
+namespace BehaviourTreeEditor.BTree.SharedVariables
 {
     public abstract class SharedVariable : ScriptableObject
     {

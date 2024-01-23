@@ -1,4 +1,4 @@
-﻿using BehaviourTreeEditor.SharedVariables;
+﻿using BehaviourTreeEditor.BTree.SharedVariables;
 using UnityEngine;
 
 namespace BehaviourTreeEditor.BTree.Conditionals
@@ -31,7 +31,7 @@ namespace BehaviourTreeEditor.BTree.Conditionals
                 Debug.Log("Target is null");
                 return State.Failure;
             }
-            
+
             if (currentGameContext.transform == null)
             {
                 Debug.Log("currentGameContext.transform is null");
