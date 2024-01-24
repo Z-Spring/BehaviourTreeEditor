@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BehaviourTreeEditor.BTree;
+using BehaviourTreeEditor.BTree.ActionNodes;
 using BehaviourTreeEditor.BTree.ParentSharedVariable;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -16,6 +17,7 @@ namespace Editor
     {
         BtreeView treeView;
         InspectorView inspectorView;
+        ScrollView scrollView;
         CreateSharedVariableEditor createSharedVariableEditor;
         BehaviourTreeRunnerEditor behaviourTreeRunnerEditor;
         VisualElement root;
@@ -60,12 +62,13 @@ namespace Editor
             treeView.OnNodeSelected = OnNodeSelectionChanged;
 
             string treeName = GetCurrentTreeName();
-            createSharedVariableEditor = new CreateSharedVariableEditor();
+            // createSharedVariableEditor = new CreateSharedVariableEditor();
+            createSharedVariableEditor = CreateInstance<CreateSharedVariableEditor>();
             UpdateCurrentSharedVariableView(treeName);
             createSharedVariableEditor.CreateSharedVariableDropdownField(root);
             if (sharedVariableContainer != null)
             {
-                createSharedVariableEditor.AddVariable(root, sharedVariableContainer);
+                createSharedVariableEditor.AddVariable(root, sharedVariableContainer, treeName);
             }
 
             OnSelectionChange();
@@ -85,6 +88,7 @@ namespace Editor
         {
             treeView = root.Q<BtreeView>();
             inspectorView = root.Q<InspectorView>();
+            scrollView = root.Q<ScrollView>();
             deleteRunnerButton = root.Q<ToolbarButton>("DeleteRunner");
             addRunnerButton = root.Q<ToolbarButton>("AddRunner");
             root.Q<Button>("SaveAsset").RegisterCallback<ClickEvent>(evt => treeView.SaveNodeAsset());
@@ -112,7 +116,7 @@ namespace Editor
         }
 
         int selectedGameObjectInstanceID;
-            
+
 
         void AddRunnerComponent()
         {
@@ -127,6 +131,8 @@ namespace Editor
             AddIconToGameObject();
             InitBehaviourTree(behaviourTreeRunner);
             InitSharedVariableContainer(behaviourTreeRunner);
+            // init sharedVariableContainer
+            // UpdateCurrentSharedVariableView(behaviourTreeRunner.name);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             OnSelectionChange();
@@ -211,7 +217,6 @@ namespace Editor
 
         void DeleteRelatedAssets(BehaviourTreeRunner behaviourTreeRunner, string treeName)
         {
-            // string treeAssetPath = AssetDatabase.GetAssetPath(behaviourTreeRunner.tree);
             string treeAssetPath = AssetResourceManager.GetBehaviourTreeAssetPath(treeName);
             string sharedVariableContainerAssetPath =
                 AssetResourceManager.GetSharedVariableContainerAssetPath(treeName);
@@ -234,7 +239,7 @@ namespace Editor
                 var runner = Selection.activeGameObject.GetComponent<BehaviourTreeRunner>();
                 if (runner)
                 {
-                    //  inspectorView.PopulateView(null);
+                    inspectorView.UpdateSelectedNodeInspector(null);
                     tree = runner.tree;
                     selectedTreeName = runner.treeName;
                     treeView.PopulateView(tree);
@@ -244,7 +249,12 @@ namespace Editor
                 }
                 else
                 {
+                    // todo: if tree is null, treeView should be reset, variable editor should be reset
                     tree = null;
+                    treeView.PopulateView(null);
+                    scrollView.Clear();
+                    // createSharedVariableEditor.LoadSharedVariableContainerAsset(string.Empty);
+                    
                 }
             }
 
