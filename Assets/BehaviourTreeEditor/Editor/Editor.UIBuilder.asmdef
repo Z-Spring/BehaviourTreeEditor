@@ -1,0 +1,17 @@
+{
+    "name": "BehaviourTreeEditor.UIBuilder",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7f3dcf0e1ad5a5349af33b00b87f265b",
+        "GUID:37272f1802416c64eb30ced2af9ffe59"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,16 @@
+{
+    "name": "BehaviourTreeEditor.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:37272f1802416c64eb30ced2af9ffe59"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
