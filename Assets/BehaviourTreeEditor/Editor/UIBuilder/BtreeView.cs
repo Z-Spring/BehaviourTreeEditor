@@ -137,6 +137,8 @@ public class BtreeView : GraphView
         graphViewChanged += OnGraphViewChanged;
         if (tree == null)
         {
+            editorWindow.rootVisualElement.Q<Label>("BehaviourTreeName").text = "Right Click to Add a Behaviour";
+            editorWindow.titleContent.text = "BehaviourTreeEditor";
             return;
         }
 
@@ -273,7 +275,7 @@ public class BtreeView : GraphView
 
         if (tree == null)
         {
-            evt.menu.AppendAction("Create Tree", _ => OnCreateTree?.Invoke());
+            evt.menu.AppendAction("Create A BehaviourTree", _ => OnCreateTree?.Invoke());
             return;
         }
 
