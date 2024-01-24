@@ -7,5 +7,11 @@ namespace Editor
         public new class UxmlFactory : UxmlFactory<SplitView, UxmlTraits>
         {
         }
+
+        public new float fixedPaneInitialDimension
+        {
+            get => base.fixedPaneInitialDimension;
+            // set => base.fixedPaneInitialDimension = value;
+        }
     }
 }

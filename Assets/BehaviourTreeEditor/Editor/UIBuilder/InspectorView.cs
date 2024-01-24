@@ -12,18 +12,16 @@ namespace Editor
         {
         }
 
-        public InspectorView()
-        {
-        }
-
         public void UpdateSelectedNodeInspector(NodeView nodeView)
         {
             Clear();
             Object.DestroyImmediate(editor);
-            // if (nodeView == null)
-            // {
-            //     return;
-            // }
+            if (nodeView == null)
+            {
+                // todo: when nodeView is null, show the some tips in the inspector view
+                return;
+            }
+
             editor = UnityEditor.Editor.CreateEditor(nodeView.node);
 
             IMGUIContainer container = new IMGUIContainer(() =>
