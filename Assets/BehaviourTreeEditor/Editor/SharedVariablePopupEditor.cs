@@ -20,6 +20,7 @@ namespace Editor
         {
             if (currentTreeName != BTreeEditor.selectedTreeName)
             {
+                currentTreeName = BTreeEditor.selectedTreeName;
                 return true;
             }
 
@@ -28,6 +29,7 @@ namespace Editor
 
         private void OnEnable()
         {
+            // allSharedVariableScriptableObjects = new();
             if (IsTreeNameChanged())
             {
                 allSharedVariableScriptableObjects = GetAllSharedVariableScriptableObjects();
@@ -100,6 +102,10 @@ namespace Editor
 
         public static void AddSharedVariable(SharedVariable variable)
         {
+            if (allSharedVariableScriptableObjects == null)
+            {
+                allSharedVariableScriptableObjects = new List<ScriptableObject>();
+            }
             allSharedVariableScriptableObjects.Add(variable);
         }
 
