@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using BehaviourTreeEditor.BTree;
 using BehaviourTreeEditor.BTree.ActionNodes;
 using BehaviourTreeEditor.BTree.ParentSharedVariable;
@@ -15,9 +16,14 @@ namespace Editor
 {
     public class BTreeEditor : EditorWindow
     {
+        public static List<Type> nodeTypes = new();
+        public static string selectedTreeName;
+
+
         BtreeView treeView;
         InspectorView inspectorView;
         ScrollView scrollView;
+        ToolbarMenu selectTreeToolbar;
         CreateSharedVariableEditor createSharedVariableEditor;
         BehaviourTreeRunnerEditor behaviourTreeRunnerEditor;
         VisualElement root;
@@ -26,18 +32,18 @@ namespace Editor
         SharedVariableContainer sharedVariableContainer;
         Texture2D icon;
         static BehaviourTree tree;
-        public static List<Type> nodeTypes = new();
-        public static string selectedTreeName;
-
+        readonly List<GameObject> theGameObjectHasRunnerList = new();
 
         private void OnEnable()
         {
             GetNodeTypes();
+            SearchBehaviourTreeRunner();
             icon = AssetResourceManager.LoadAsset<Texture2D>(AssetResourceManager.IconPath);
             BtreeView.OnCreateTree += AddRunnerComponent;
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
+
 
         private void OnDisable()
         {
@@ -58,9 +64,9 @@ namespace Editor
             LoadUIAssets();
             InitializeEditorWindowElements();
             AddBehaviourTreeRunnerComponent();
+            AssignTreeDropDown();
             DeleteBehaviourTreeRunnerComponent();
             treeView.OnNodeSelected = OnNodeSelectionChanged;
-
             string treeName = GetCurrentTreeName();
             // createSharedVariableEditor = new CreateSharedVariableEditor();
             createSharedVariableEditor = CreateInstance<CreateSharedVariableEditor>();
@@ -88,6 +94,7 @@ namespace Editor
         {
             treeView = root.Q<BtreeView>();
             inspectorView = root.Q<InspectorView>();
+            selectTreeToolbar = root.Q<ToolbarMenu>("SelectTree");
             scrollView = root.Q<ScrollView>();
             deleteRunnerButton = root.Q<ToolbarButton>("DeleteRunner");
             addRunnerButton = root.Q<ToolbarButton>("AddRunner");
@@ -121,6 +128,7 @@ namespace Editor
         void AddRunnerComponent()
         {
             var runner = Selection.activeGameObject;
+            // this maybe change later, according to the requirement
             if (runner.GetComponent<BehaviourTreeRunner>())
             {
                 return;
@@ -128,6 +136,11 @@ namespace Editor
 
             var behaviourTreeRunner = runner.AddComponent<BehaviourTreeRunner>();
             selectedGameObjectInstanceID = runner.GetInstanceID();
+
+            // theGameObjectHasRunnerList.Add(runner);
+            // AssignTreeDropDown();
+            AddToolbarMenu(runner.name);
+
             AddIconToGameObject();
             InitBehaviourTree(behaviourTreeRunner);
             InitSharedVariableContainer(behaviourTreeRunner);
@@ -209,6 +222,11 @@ namespace Editor
                     string treeName = behaviourTreeRunner.tree.name;
                     treeView.ResetView();
                     root.Query<Label>("BehaviourTreeName").First().text = "Click + To Add A Behaviour Tree Runner";
+
+                    // theGameObjectHasRunnerList.Remove(runner);
+                    // AssignTreeDropDown();
+                    RemoveToolbarMenu(runner.name);
+
                     DeleteRelatedAssets(behaviourTreeRunner, treeName);
                     DeleteIconFromGameObject();
                 }
@@ -236,6 +254,7 @@ namespace Editor
 
             if (Selection.activeGameObject)
             {
+                selectTreeToolbar.text = Selection.activeGameObject.name;
                 var runner = Selection.activeGameObject.GetComponent<BehaviourTreeRunner>();
                 if (runner)
                 {
@@ -254,7 +273,6 @@ namespace Editor
                     treeView.PopulateView(null);
                     scrollView.Clear();
                     // createSharedVariableEditor.LoadSharedVariableContainerAsset(string.Empty);
-                    
                 }
             }
 
@@ -275,6 +293,59 @@ namespace Editor
                     treeView.PopulateView(tree);
                 }
             }
+        }
+
+        void SearchBehaviourTreeRunner()
+        {
+            var behaviourTreeRunners = FindObjectsOfType<BehaviourTreeRunner>();
+            foreach (var behaviourTreeRunner in behaviourTreeRunners)
+            {
+                if (theGameObjectHasRunnerList.Contains(behaviourTreeRunner.gameObject))
+                {
+                    continue;
+                }
+
+                theGameObjectHasRunnerList.Add(behaviourTreeRunner.gameObject);
+            }
+        }
+
+        void AssignTreeDropDown()
+        {
+            selectTreeToolbar.menu.MenuItems().Clear();
+            var relativeGameObjects = theGameObjectHasRunnerList.Select(go => go.name).ToArray();
+            Debug.Log(relativeGameObjects.Length);
+            foreach (var relativeGameObject in relativeGameObjects)
+            {
+                selectTreeToolbar.menu.AppendAction(relativeGameObject, OnSelectTree);
+            }
+        }
+
+        void AddToolbarMenu(string runnerName)
+        {
+            selectTreeToolbar.menu.AppendAction(runnerName, OnSelectTree);
+        }
+
+        void RemoveToolbarMenu(string runnerName)
+        {
+            var dropdownMenuItems = selectTreeToolbar.menu.MenuItems();
+            for (int i = dropdownMenuItems.Count - 1; i >= 0; i--)
+            {
+                if (dropdownMenuItems[i] is DropdownMenuAction menuAction && menuAction.name == runnerName)
+                {
+                    selectTreeToolbar.menu.RemoveItemAt(i);
+                    break; // 一旦找到并移除了项，就退出循环
+                }
+            }
+        }
+
+
+        void OnSelectTree(DropdownMenuAction action)
+        {
+            //todo: i don't know how to set the activeGameObject status to the selected one
+            var selectedGameObject = theGameObjectHasRunnerList.FirstOrDefault(go => go.name == action.name);
+            Selection.activeGameObject = selectedGameObject;
+
+            OnSelectionChange();
         }
 
 
