@@ -14,8 +14,10 @@ namespace Editor
     {
         readonly List<UnityEditor.Editor> editorList = new();
         readonly Dictionary<SharedVariable, IMGUIContainer> sharedVariableContainerDic = new();
+        public static readonly Dictionary<SharedVariable, IMGUIContainer> dic = new();
         IMGUIContainer variableContainer;
         ScrollView scrollView;
+
 
         readonly Dictionary<string, Type> typeMap = new()
         {
@@ -42,35 +44,21 @@ namespace Editor
 
         public void CreateSharedVariableDropdownField(VisualElement root)
         {
-            DropdownField field = root.Q<DropdownField>();
+            DropdownField field = root.Q<DropdownField>("TypeSelect");
             field.choices.Clear();
             field.choices.AddRange(typeMap.Keys);
             string firstValue = field.choices.FirstOrDefault();
             field.SetValueWithoutNotify(firstValue);
         }
 
-        public static Dictionary<SharedVariable, IMGUIContainer> dic = new();
-
-
         public void AddVariable(VisualElement root, SharedVariableContainer sharedVariableContainer, string treeName)
         {
             InitializeEditorWindowElements(root);
             var textField = variableContainer.Q<TextField>();
             var addVariableButton = variableContainer.Q<Button>();
-            //todo: if textField is empty, the button should be disabled, it should check for every frame
-            // if (textField.text == string.Empty)
-            // {
-            //     addVariableButton.SetEnabled(false);
-            // }
-            // else
-            // {
-            //     addVariableButton.SetEnabled(true);
-            // }
-
 
             addVariableButton.clicked += () =>
             {
-                Debug.Log("addVariableButton clicked");
                 var (variableName, typeSelected) = GetVariableNameAndSelectedType(textField, root);
                 if (variableName == string.Empty)
                 {
@@ -88,7 +76,7 @@ namespace Editor
                         sharedVariableContainer);
 
                 UnityEditor.Editor testEditor = null;
-                testEditor = UnityEditor.Editor.CreateEditor(sharedVariable);
+                testEditor = CreateEditor(sharedVariable);
                 var newIMGUIContainer = new IMGUIContainer(() =>
                 {
                     testEditor.OnInspectorGUI();
@@ -96,7 +84,7 @@ namespace Editor
                 });
                 scrollView.Add(newIMGUIContainer);
                 dic.Add(sharedVariable, newIMGUIContainer);
-                // DisplaySharedVariableInIMGUI(sharedVariable);
+                addVariableButton.SetEnabled(false);
             };
         }
 
@@ -118,7 +106,7 @@ namespace Editor
             string typeSelected, SharedVariableContainer sharedVariableContainer)
         {
             Type type = typeMap[typeSelected];
-            SharedVariable sharedVariable = ScriptableObject.CreateInstance(type) as SharedVariable;
+            SharedVariable sharedVariable = CreateInstance(type) as SharedVariable;
             if (sharedVariable == null)
             {
                 Debug.LogError("sharedVariable is null");
@@ -130,6 +118,19 @@ namespace Editor
             SharedVariablePopupEditor.AddSharedVariable(sharedVariable);
             textField.SetValueWithoutNotify(string.Empty);
             return sharedVariable;
+        }
+
+        public void InitializeVariableEditors(string treeName, VisualElement root)
+        {
+            editorList.Clear();
+            scrollView = root.Q<ScrollView>();
+            scrollView.Clear();
+            string assetPath = AssetResourceManager.GetSharedVariableContainerAssetPath(treeName);
+            var variables = AssetResourceManager.LoadAllAssets<SharedVariable>(assetPath);
+            foreach (var variable in variables)
+            {
+                DisplaySharedVariableInIMGUI(variable);
+            }
         }
 
         void DisplaySharedVariableInIMGUI(SharedVariable variable)
@@ -152,18 +153,19 @@ namespace Editor
             scrollView.Add(newIMGUIContainer);
         }
 
+
         void UpdateEditor(SharedVariable variable, ref UnityEditor.Editor currentEditor)
         {
             int editorIndex = editorList.FindIndex(editor => editor.target == variable);
 
             if (editorIndex < 0)
             {
-                currentEditor = UnityEditor.Editor.CreateEditor(variable);
+                currentEditor = CreateEditor(variable);
                 editorList.Add(currentEditor);
             }
             else
             {
-                UnityEditor.Editor.CreateCachedEditor(variable, null, ref currentEditor);
+                CreateCachedEditor(variable, null, ref currentEditor);
                 editorList[editorIndex] = currentEditor;
             }
         }
@@ -251,19 +253,6 @@ namespace Editor
             string assetPath = AssetResourceManager.GetSharedVariableContainerAssetPath(treeName);
             SharedVariableContainer sv = AssetResourceManager.LoadAsset<SharedVariableContainer>(assetPath);
             return sv;
-        }
-
-        public void InitializeVariableEditors(string treeName, VisualElement root)
-        {
-            editorList.Clear();
-            scrollView = root.Q<ScrollView>();
-            scrollView.Clear();
-            string assetPath = AssetResourceManager.GetSharedVariableContainerAssetPath(treeName);
-            var variables = AssetResourceManager.LoadAllAssets<SharedVariable>(assetPath);
-            foreach (var variable in variables)
-            {
-                DisplaySharedVariableInIMGUI(variable);
-            }
         }
     }
 }

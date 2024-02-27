@@ -130,14 +130,14 @@ namespace Editor
                 {
                     DestroyImmediate(so, true);
 
-                    Delete(myTarget);
+                    DeleteVariable(myTarget);
                 }
             }
 
             EditorGUILayout.EndHorizontal();
         }
 
-        void Delete(SharedVariable variable)
+        void DeleteVariable(SharedVariable variable)
         {
             if (CreateSharedVariableEditor.dic.TryGetValue(variable, out var container))
             {
