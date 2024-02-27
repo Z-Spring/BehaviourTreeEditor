@@ -29,6 +29,8 @@ namespace Editor
         VisualElement root;
         ToolbarButton deleteRunnerButton;
         ToolbarButton addRunnerButton;
+        Button addVariableButton;
+        TextField inputSharedValueName;
         SharedVariableContainer sharedVariableContainer;
         Texture2D icon;
         static BehaviourTree tree;
@@ -77,7 +79,21 @@ namespace Editor
                 createSharedVariableEditor.AddVariable(root, sharedVariableContainer, treeName);
             }
 
+            addVariableButton.SetEnabled(false);
+            inputSharedValueName.RegisterValueChangedCallback((evt) => { AddSharedVariableButtonStatusChange(evt.newValue); });
             OnSelectionChange();
+        }
+
+        void AddSharedVariableButtonStatusChange(string newText)
+        {
+            if (string.IsNullOrEmpty(newText))
+            {
+                addVariableButton.SetEnabled(false);
+            }
+            else
+            {
+                addVariableButton.SetEnabled(true);
+            }
         }
 
         void LoadUIAssets()
@@ -98,6 +114,11 @@ namespace Editor
             scrollView = root.Q<ScrollView>();
             deleteRunnerButton = root.Q<ToolbarButton>("DeleteRunner");
             addRunnerButton = root.Q<ToolbarButton>("AddRunner");
+            var variableContainer = root.Q<IMGUIContainer>("AddVariableContainer");
+
+            inputSharedValueName = variableContainer.Q<TextField>();
+            addVariableButton = variableContainer.Q<Button>();
+
             root.Q<Button>("SaveAsset").RegisterCallback<ClickEvent>(evt => treeView.SaveNodeAsset());
         }
 
