@@ -124,12 +124,9 @@ namespace Editor
             var buttonGUIContent = new GUIContent(iconTexture);
             if (GUILayout.Button(buttonGUIContent, GUILayout.Width(20), GUILayout.Height(18)))
             {
-                // newValue = string.Empty;
                 if (EditorUtility.DisplayDialog("Delete variable",
                         "Are you sure you want to delete this variable?", "Yes", "No"))
                 {
-                    DestroyImmediate(so, true);
-
                     DeleteVariable(myTarget);
                 }
             }
@@ -149,8 +146,7 @@ namespace Editor
 
                 SharedVariablePopupEditor.RemoveSharedVariable(variable);
             }
-
-            DestroyImmediate(variable);
+            AssetDatabase.RemoveObjectFromAsset(so);
         }
     }
 }
