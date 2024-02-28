@@ -29,7 +29,6 @@ namespace Editor
 
         private void OnEnable()
         {
-            // allSharedVariableScriptableObjects = new();
             if (IsTreeNameChanged())
             {
                 allSharedVariableScriptableObjects = GetAllSharedVariableScriptableObjects();
@@ -45,12 +44,12 @@ namespace Editor
 
         List<ScriptableObject> GetAllSharedVariableScriptableObjects()
         {
-            var relativeAssets = AssetDatabase.FindAssets($"{BTreeEditor.selectedTreeName}_SharedVariableContainer");
-            var mainSharedVariableContainerPath = relativeAssets.FirstOrDefault();
-            var mainSharedVariableContainer = AssetDatabase.GUIDToAssetPath(mainSharedVariableContainerPath);
-            var allSharedVariableAssets = AssetDatabase.LoadAllAssetsAtPath(mainSharedVariableContainer);
+            var sharedVariableContainerAssetPath =
+                AssetResourceManager.GetSharedVariableContainerAssetPath(BTreeEditor.selectedTreeName);
+            var allSharedVariableAssets =
+                AssetResourceManager.LoadAllAssets<ScriptableObject>(sharedVariableContainerAssetPath);
 
-            allSharedVariableScriptableObjects = allSharedVariableAssets.OfType<ScriptableObject>().ToList();
+            allSharedVariableScriptableObjects = allSharedVariableAssets.ToList();
             return allSharedVariableScriptableObjects;
         }
 
@@ -106,6 +105,7 @@ namespace Editor
             {
                 allSharedVariableScriptableObjects = new List<ScriptableObject>();
             }
+
             allSharedVariableScriptableObjects.Add(variable);
         }
 
