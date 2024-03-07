@@ -37,7 +37,7 @@ namespace Editor
             myTarget = (SharedVariable)target;
             so = (ScriptableObject)myTarget;
             iconTexture =
-                EditorGUIUtility.Load("Assets/BehaviourTreeEditor/Gizmos/Delete2.png") as Texture2D;
+                EditorGUIUtility.Load(AssetResourceManager.DeleteIconPath) as Texture2D;
         }
 
         public override void OnInspectorGUI()
@@ -146,6 +146,7 @@ namespace Editor
 
                 SharedVariablePopupEditor.RemoveSharedVariable(variable);
             }
+
             AssetDatabase.RemoveObjectFromAsset(so);
         }
     }
