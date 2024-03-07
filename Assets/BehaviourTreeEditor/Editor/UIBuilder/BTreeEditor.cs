@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using BehaviourTreeEditor.BTree;
-using BehaviourTreeEditor.BTree.ActionNodes;
 using BehaviourTreeEditor.BTree.ParentSharedVariable;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -72,6 +70,8 @@ namespace Editor
             string treeName = GetCurrentTreeName();
             // createSharedVariableEditor = new CreateSharedVariableEditor();
             createSharedVariableEditor = CreateInstance<CreateSharedVariableEditor>();
+            var editorPlay = CreateInstance<EditorPlayController>();
+            editorPlay.Init(root);
             UpdateCurrentSharedVariableView(treeName);
             createSharedVariableEditor.CreateSharedVariableDropdownField(root);
             if (sharedVariableContainer != null)
@@ -80,7 +80,10 @@ namespace Editor
             }
 
             addVariableButton.SetEnabled(false);
-            inputSharedValueName.RegisterValueChangedCallback((evt) => { AddSharedVariableButtonStatusChange(evt.newValue); });
+            inputSharedValueName.RegisterValueChangedCallback((evt) =>
+            {
+                AddSharedVariableButtonStatusChange(evt.newValue);
+            });
             OnSelectionChange();
         }
 
@@ -157,16 +160,10 @@ namespace Editor
 
             var behaviourTreeRunner = runner.AddComponent<BehaviourTreeRunner>();
             selectedGameObjectInstanceID = runner.GetInstanceID();
-
-            // theGameObjectHasRunnerList.Add(runner);
-            // AssignTreeDropDown();
             AddToolbarMenu(runner.name);
-
             AddIconToGameObject();
             InitBehaviourTree(behaviourTreeRunner);
             InitSharedVariableContainer(behaviourTreeRunner);
-            // init sharedVariableContainer
-            // UpdateCurrentSharedVariableView(behaviourTreeRunner.name);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             OnSelectionChange();
@@ -244,8 +241,6 @@ namespace Editor
                     treeView.ResetView();
                     root.Query<Label>("BehaviourTreeName").First().text = "Click + To Add A Behaviour Tree Runner";
 
-                    // theGameObjectHasRunnerList.Remove(runner);
-                    // AssignTreeDropDown();
                     RemoveToolbarMenu(runner.name);
 
                     DeleteRelatedAssets(behaviourTreeRunner, treeName);
@@ -293,7 +288,6 @@ namespace Editor
                     tree = null;
                     treeView.PopulateView(null);
                     scrollView.Clear();
-                    // createSharedVariableEditor.LoadSharedVariableContainerAsset(string.Empty);
                 }
             }
 
@@ -334,7 +328,6 @@ namespace Editor
         {
             selectTreeToolbar.menu.MenuItems().Clear();
             var relativeGameObjects = theGameObjectHasRunnerList.Select(go => go.name).ToArray();
-            Debug.Log(relativeGameObjects.Length);
             foreach (var relativeGameObject in relativeGameObjects)
             {
                 selectTreeToolbar.menu.AppendAction(relativeGameObject, OnSelectTree);
