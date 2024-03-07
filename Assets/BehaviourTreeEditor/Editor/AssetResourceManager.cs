@@ -9,8 +9,12 @@ namespace Editor
         public const string BTEditorUXMLPath = "Assets/BehaviourTreeEditor/Editor/UIBuilder/BTreeEditor.uxml";
         public const string BTEditorUSSPath = "Assets/BehaviourTreeEditor/Editor/UIBuilder/BTreeEditor.uss";
         public const string NodeViewUXMLPath = "Assets/BehaviourTreeEditor/Editor/UIBuilder/NodeView.uxml";
+        
         public const string IconPath = "Assets/BehaviourTreeEditor/Gizmos/Icon.png";
-
+        public const string DeleteIconPath = "Assets/BehaviourTreeEditor/Gizmos/Delete2.png";
+        public const string PlayIconPath = "Assets/BehaviourTreeEditor/Gizmos/Play.png";
+        public const string PauseIconPath = "Assets/BehaviourTreeEditor/Gizmos/Pause.png";
+        public const string StepIconPath = "Assets/BehaviourTreeEditor/Gizmos/Step.png";
         public static string GetSharedVariableContainerAssetPath(string treeName)
         {
             return $"{RootBehaviourTreeEditorPath}/{treeName}_SharedVariableContainer.asset";
