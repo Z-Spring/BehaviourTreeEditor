@@ -22,7 +22,7 @@
                         <ui:DropdownField label="Type" index="-1" choices="string" name="TypeSelect" style="height: 20px; width: 243px; font-size: 12px;" />
                         <ui:Button text="Add" display-tooltip-when-elided="true" name="Add" />
                     </ui:IMGUIContainer>
-                    <ui:ScrollView mode="Vertical" name="ScrollView" style="height: 163px; position: relative; top: 7px; left: 12px; width: 283px; flex-grow: 1; flex-wrap: wrap; flex-direction: row; min-height: 50px; bottom: auto;" />
+                    <ui:ScrollView mode="Vertical" name="ScrollView" style="height: 163px; position: flex-start; top: 7px; left: 12px; width: 283px; flex-grow: 1; flex-wrap: wrap; flex-direction: row; min-height: 50px; bottom: auto;" />
                 </ui:VisualElement>
             </Editor.SplitView>
         </ui:VisualElement>
@@ -30,6 +30,7 @@
             <ui:Label text="Tree View" display-tooltip-when-elided="true" style="-unity-font-style: bold; -unity-text-outline-color: rgb(32, 32, 32); background-color: rgb(32, 32, 32); font-size: 15px;" />
             <BtreeView focusable="true" style="flex-grow: 1;">
                 <ui:Label text="Right Click To Add A BehaviourTree" display-tooltip-when-elided="true" name="BehaviourTreeName" style="position: absolute; left: 12px; top: 17px; -unity-font-style: bold; font-size: 23px;" />
+                <uie:Toolbar name="BottomToolbar" style="position: absolute; bottom: 0; top: auto; flex-direction: row; align-items: auto; align-self: auto; justify-content: flex-start; height: 21px; width: 100%; max-width: none;" />
             </BtreeView>
         </ui:VisualElement>
     </Editor.SplitView>
