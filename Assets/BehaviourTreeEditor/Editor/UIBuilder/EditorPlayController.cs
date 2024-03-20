@@ -39,7 +39,9 @@ namespace Editor
                 {
                     backgroundImage = new StyleBackground(icon),
                     width = 20,
-                    height = 18
+                    height = 18,
+                    marginLeft = 0,
+                    marginRight = 0
                 }
             };
         }
