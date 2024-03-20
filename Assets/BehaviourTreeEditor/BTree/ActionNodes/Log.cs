@@ -18,6 +18,12 @@ namespace BehaviourTreeEditor.BTree.ActionNodes
 
         protected override State OnUpdate()
         {
+            if (messagePrint is null)
+            {
+                Debug.LogError("Message is null");
+                return State.Failure;
+            }
+
             Debug.Log($"{messagePrint.sharedValue}  ");
             return State.Success;
         }
