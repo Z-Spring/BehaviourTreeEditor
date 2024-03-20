@@ -20,19 +20,20 @@
                 case State.Running:
                     break;
                 case State.Failure:
-                    if (restartOnFailure)
+                    if (!restartOnFailure)
                     {
-                        return State.Running;
+                        return State.Failure;
                     }
 
-                    return State.Failure;
+                    break;
+
                 case State.Success:
-                    if (restartOnSuccess)
+                    if (!restartOnSuccess)
                     {
-                        return State.Running;
+                        return State.Success;
                     }
 
-                    return State.Success;
+                    break;
             }
 
             return State.Running;
