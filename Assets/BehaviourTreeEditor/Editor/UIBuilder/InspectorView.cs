@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor
@@ -18,7 +17,10 @@ namespace Editor
             Object.DestroyImmediate(editor);
             if (nodeView == null)
             {
-                // todo: when nodeView is null, show the some tips in the inspector view
+                Label label = new Label("Select a node to view its properties.");
+                label.style.unityFontStyleAndWeight = FontStyle.BoldAndItalic;
+
+                Add(label);
                 return;
             }
 
