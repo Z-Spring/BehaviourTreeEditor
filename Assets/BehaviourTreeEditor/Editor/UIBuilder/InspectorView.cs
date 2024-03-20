@@ -18,7 +18,7 @@ namespace Editor
             if (nodeView == null)
             {
                 Label label = new Label("Select a node to view its properties.");
-                label.style.unityFontStyleAndWeight = FontStyle.BoldAndItalic;
+                label.style.unityFontStyleAndWeight = FontStyle.Italic;
 
                 Add(label);
                 return;
