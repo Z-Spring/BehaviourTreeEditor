@@ -19,7 +19,6 @@ namespace BehaviourTreeEditor.BTree
         [HideInInspector] public bool started;
         [HideInInspector] public string guid;
         [HideInInspector] public Vector2 position;
-        [HideInInspector] public Blackboard blackboard;
         [HideInInspector] public CurrentGameContext currentGameContext;
         [HideInInspector] public Node parent;
 
