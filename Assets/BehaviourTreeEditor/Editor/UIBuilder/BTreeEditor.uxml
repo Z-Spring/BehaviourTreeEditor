@@ -8,29 +8,29 @@
         <uie:ToolbarButton text="+" display-tooltip-when-elided="true" name="AddRunner" style="border-left-color: rgb(39, 40, 41); border-right-color: rgb(39, 40, 41); border-top-color: rgb(39, 40, 41); border-bottom-color: rgb(39, 40, 41); border-top-width: 0; border-bottom-width: 0; padding-top: 2px; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px;" />
         <uie:ToolbarButton text="-" display-tooltip-when-elided="true" name="DeleteRunner" style="border-left-color: rgb(39, 40, 41); border-right-color: rgb(39, 40, 41); border-top-color: rgb(39, 40, 41); border-bottom-color: rgb(39, 40, 41); border-top-width: 0; border-bottom-width: 0; padding-top: 2px; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px;" />
     </uie:Toolbar>
-    <Editor.SplitView name="SplitView" fixed-pane-initial-dimension="300">
-        <ui:VisualElement name="left-panel">
+    <Editor.SplitView name="SplitView" fixed-pane-initial-dimension="300" fixed-pane-index="0" style="min-width: auto;">
+        <ui:VisualElement name="left-panel" style="min-width: 300px; max-width: none;">
             <Editor.SplitView orientation="Vertical" fixed-pane-initial-dimension="300" style="font-size: 15px;">
-                <ui:VisualElement name="inspector-container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                <ui:VisualElement name="inspector-container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); min-height: 200px;">
                     <ui:Label text="Inspector" display-tooltip-when-elided="true" style="-unity-font-style: bold; -unity-text-outline-color: rgb(0, 0, 0); background-color: rgb(32, 32, 32); font-size: 15px;" />
-                    <Editor.InspectorView />
+                    <Editor.InspectorView style="margin-left: 5px;" />
                 </ui:VisualElement>
-                <ui:VisualElement name="variables-container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                <ui:VisualElement name="variables-container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); min-height: 300px; max-height: none;">
                     <ui:Label tabindex="-1" text="Variables" display-tooltip-when-elided="true" style="background-color: rgb(32, 32, 32); -unity-font-style: bold; height: auto;" />
                     <ui:IMGUIContainer name="AddVariableContainer" style="height: 75px;">
                         <ui:TextField picking-mode="Ignore" label="Name" name="NameField" style="font-size: 12px;" />
                         <ui:DropdownField label="Type" index="-1" choices="string" name="TypeSelect" style="height: 20px; width: 243px; font-size: 12px;" />
                         <ui:Button text="Add" display-tooltip-when-elided="true" name="Add" />
                     </ui:IMGUIContainer>
-                    <ui:ScrollView mode="Vertical" name="ScrollView" style="height: 163px; position: flex-start; top: 7px; left: 12px; width: 283px; flex-grow: 1; flex-wrap: wrap; flex-direction: row; min-height: 50px; bottom: auto;" />
+                    <ui:ScrollView mode="Vertical" name="ScrollView" style="height: 163px; position: relative; top: 7px; left: 12px; width: 95%; flex-grow: 1; flex-wrap: wrap; flex-direction: row; min-height: 50px; bottom: auto;" />
                 </ui:VisualElement>
             </Editor.SplitView>
         </ui:VisualElement>
-        <ui:VisualElement name="right-panel">
+        <ui:VisualElement name="right-panel" style="max-width: none; min-width: 400px;">
             <ui:Label text="Tree View" display-tooltip-when-elided="true" style="-unity-font-style: bold; -unity-text-outline-color: rgb(32, 32, 32); background-color: rgb(32, 32, 32); font-size: 15px;" />
             <BtreeView focusable="true" style="flex-grow: 1;">
                 <ui:Label text="Right Click To Add A BehaviourTree" display-tooltip-when-elided="true" name="BehaviourTreeName" style="position: absolute; left: 12px; top: 17px; -unity-font-style: bold; font-size: 23px;" />
-                <uie:Toolbar name="BottomToolbar" style="position: absolute; bottom: 0; top: auto; flex-direction: row; align-items: auto; align-self: auto; justify-content: flex-start; height: 21px; width: 100%; max-width: none;" />
+                <uie:Toolbar name="BottomToolbar" style="position: absolute; bottom: -1px; top: auto; flex-direction: row; align-items: auto; align-self: auto; justify-content: flex-start; height: 21px; width: 100%; max-width: none;" />
             </BtreeView>
         </ui:VisualElement>
     </Editor.SplitView>
