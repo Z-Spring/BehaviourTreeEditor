@@ -31,14 +31,6 @@ namespace Editor
             stepIcon = AssetResourceManager.LoadAsset<Texture2D>(AssetResourceManager.StepIconPath);
         }
 
-        void ToolbarAddButton(VisualElement root)
-        {
-            var bottomToolbar = root.Q<Toolbar>("BottomToolbar");
-            bottomToolbar.Add(playBtn);
-            bottomToolbar.Add(pauseBtn);
-            bottomToolbar.Add(stepBtn);
-        }
-
         void SetButton(ref Button button, Action clickAction, Texture2D icon)
         {
             button = new Button(clickAction)
@@ -50,6 +42,14 @@ namespace Editor
                     height = 18
                 }
             };
+        }
+
+        void ToolbarAddButton(VisualElement root)
+        {
+            var bottomToolbar = root.Q<Toolbar>("BottomToolbar");
+            bottomToolbar.Add(playBtn);
+            bottomToolbar.Add(pauseBtn);
+            bottomToolbar.Add(stepBtn);
         }
 
 
