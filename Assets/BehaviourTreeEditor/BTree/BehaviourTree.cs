@@ -12,7 +12,6 @@ namespace BehaviourTreeEditor.BTree
         public Node rootNode;
         public Node.State treeState = Node.State.Running;
         public List<Node> nodes = new();
-        public Blackboard blackboard = new();
 
         public Node.State Update()
         {
@@ -166,7 +165,6 @@ namespace BehaviourTreeEditor.BTree
         {
             Traverse(rootNode, node =>
             {
-                node.blackboard = blackboard;
                 node.currentGameContext = context;
             });
         }
