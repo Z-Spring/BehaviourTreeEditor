@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BehaviourTreeEditor.BTree;
+using BehaviourTreeEditor.BTree.ActionNodes;
 using Editor;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -15,6 +16,7 @@ public class BtreeView : GraphView
     public static MyEdgeConnectorListener listener;
     public static event System.Action OnCreateTree;
     public bool HasUnsavedChanges { get; set; }
+
     BehaviourTree tree;
     Vector2 mousePosition;
     Button saveButton;
@@ -225,9 +227,6 @@ public class BtreeView : GraphView
                     tree.RemoveChild(outputNodeView.node, inputNodeView.node);
                 }
             }
-
-            // AssetDatabase.SaveAssets();
-            // AssetDatabase.Refresh();
         }
 
         if (graphviewchange.edgesToCreate != null)
@@ -292,39 +291,32 @@ public class BtreeView : GraphView
         return newNode;
     }
 
-    readonly List<ISelectable> newSelection = new List<ISelectable>();
+    readonly List<ISelectable> newSelection = new();
 
     void DuplicateNode()
     {
         if (selection.Count >= 1)
         {
+            newSelection.Clear();
             selection.ForEach(s =>
             {
                 if (s is NodeView nodeView)
                 {
+                    // nodesToRemove.Add(nodeView);
                     Vector2 currentPosition = nodeView.GetPosition().position;
                     BehaviourTreeEditor.BTree.Node node = CloneNode(nodeView.node);
-
                     CreateNodeViewForDuplicate(node, new Vector2(currentPosition.x + 100, currentPosition.y + 100));
                 }
             });
+            ClearSelection();
+            newSelection.ForEach(AddToSelection);
         }
-        else
-        {
-            return;
-        }
-
-        // todo: clearSelection 有问题   
-        // selection.Clear();
-        // ClearSelection();
-        newSelection.ForEach(AddToSelection);
     }
 
     static void CreateNodeTemplateScript(string path)
     {
         // add script
         ProjectWindowUtil.CreateScriptAssetFromTemplateFile(path, "NewNode.cs");
-        // ProjectWindowUtil.CreateScriptAssetFromTemplateFile();
     }
 
     public void CreateNode(Type type, Vector2 position)
